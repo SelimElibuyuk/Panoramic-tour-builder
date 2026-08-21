@@ -1,0 +1,1 @@
+console.log("Birleştirme işlemi tamamlandı. Yeni birleşik çokgen oluşturuldu.");
