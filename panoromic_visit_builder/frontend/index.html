@@ -9,7 +9,20 @@
     <script src="https://unpkg.com/konva@9/konva.min.js" , defer></script>
     <script src="https://unpkg.com/konva@9/konva.min.js"></script>
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core@5/index.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/markers-plugin@5/index.css" />
+
     <script src="https://cdn.jsdelivr.net/npm/polybooljs@1.2.0/dist/polybool.min.js"></script>
+
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "@photo-sphere-viewer/core": "https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core@5/index.module.js",
+        "@photo-sphere-viewer/markers-plugin": "https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/markers-plugin@5/index.module.js"
+      }
+    }
+    </script>
 
 
 </head>
@@ -33,6 +46,9 @@
         <li>
             <button id="Node-tool">Add Node</button>
         </li>
+        <li>
+            <button id="Switch-panorama-tool">Switch Panorama</button>
+        </li>
         </li>
         <li>
             <button id="Group-remove-tool" , style="color: red;">Group Remove</button>
@@ -44,6 +60,9 @@
         <div id="properties">
             <li>
                 <button id="Change-color-tool">Change Color</button>
+            </li>
+            <li>
+                <button id="Set-panorama-tool">Set Panorama</button>
             </li>
             <li>
                 <button id="Remove-object-tool">Remove Object</button>
