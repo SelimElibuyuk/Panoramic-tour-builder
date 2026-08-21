@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>panoramic view creator</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/konva@9/konva.min.js" , defer></script>
+    <script src="https://unpkg.com/konva@9/konva.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/polybooljs@1.2.0/dist/polybool.min.js"></script>
+
+
+</head>
+
+<body>
+    <div id="side-bar">
+        <h2>Tools</h2>
+        <li>
+            <button id="rectangle-tool">Rectangle</button>
+        </li>
+        <li>
+            <button id="Circle-tool">Circle</button>
+        </li>
+        <li>
+            <button id="Group-tool">Group</button>
+        </li>
+        </li>
+        <li>
+            <button id="Finish">Finish</button>
+        </li>
+        <li>
+            <button id="Node-tool">Add Node</button>
+        </li>
+        </li>
+        <li>
+            <button id="Group-remove-tool" , style="color: red;">Group Remove</button>
+        </li>
+    </div>
+    <div id='container'></div>
+    <div id="side-bar2">
+        <h2>Properties</h2>
+        <div id="properties">
+            <li>
+                <button id="Change-color-tool">Change Color</button>
+            </li>
+            <li>
+                <button id="Remove-object-tool">Remove Object</button>
+            </li>
+        </div>
+    </div>
+    <script type="module" src="js/main.js"></script>
+</body>
+
+</html>
