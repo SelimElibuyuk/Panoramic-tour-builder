@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "lBmWEZ83WvU=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\bt.stajyer\\Desktop\\Yeni klasör (2)\\MoodleIntegration\\MoodleIntegration.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\bt.stajyer\\.nuget\\packages\\fluentftp\\54.2.0\\fluentftp.54.2.0.nupkg.sha512"
+  ],
+  "logs": []
+}

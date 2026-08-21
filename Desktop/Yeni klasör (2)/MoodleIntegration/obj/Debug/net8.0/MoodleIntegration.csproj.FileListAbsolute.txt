@@ -1,0 +1,63 @@
+C:\Users\bt.stajyer\Desktop\MoodleIntegration\bin\Debug\net8.0\appsettings.Development.json
+C:\Users\bt.stajyer\Desktop\MoodleIntegration\bin\Debug\net8.0\appsettings.json
+C:\Users\bt.stajyer\Desktop\MoodleIntegration\bin\Debug\net8.0\MoodleIntegration.staticwebassets.runtime.json
+C:\Users\bt.stajyer\Desktop\MoodleIntegration\bin\Debug\net8.0\MoodleIntegration.exe
+C:\Users\bt.stajyer\Desktop\MoodleIntegration\bin\Debug\net8.0\MoodleIntegration.deps.json
+C:\Users\bt.stajyer\Desktop\MoodleIntegration\bin\Debug\net8.0\MoodleIntegration.runtimeconfig.json
+C:\Users\bt.stajyer\Desktop\MoodleIntegration\bin\Debug\net8.0\MoodleIntegration.dll
+C:\Users\bt.stajyer\Desktop\MoodleIntegration\bin\Debug\net8.0\MoodleIntegration.pdb
+C:\Users\bt.stajyer\Desktop\MoodleIntegration\obj\Debug\net8.0\MoodleIntegration.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\bt.stajyer\Desktop\MoodleIntegration\obj\Debug\net8.0\MoodleIntegration.AssemblyInfoInputs.cache
+C:\Users\bt.stajyer\Desktop\MoodleIntegration\obj\Debug\net8.0\MoodleIntegration.AssemblyInfo.cs
+C:\Users\bt.stajyer\Desktop\MoodleIntegration\obj\Debug\net8.0\MoodleIntegration.csproj.CoreCompileInputs.cache
+C:\Users\bt.stajyer\Desktop\MoodleIntegration\obj\Debug\net8.0\MoodleIntegration.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\bt.stajyer\Desktop\MoodleIntegration\obj\Debug\net8.0\MoodleIntegration.RazorAssemblyInfo.cache
+C:\Users\bt.stajyer\Desktop\MoodleIntegration\obj\Debug\net8.0\MoodleIntegration.RazorAssemblyInfo.cs
+C:\Users\bt.stajyer\Desktop\MoodleIntegration\obj\Debug\net8.0\staticwebassets.build.json
+C:\Users\bt.stajyer\Desktop\MoodleIntegration\obj\Debug\net8.0\staticwebassets.development.json
+C:\Users\bt.stajyer\Desktop\MoodleIntegration\obj\Debug\net8.0\staticwebassets\msbuild.MoodleIntegration.Microsoft.AspNetCore.StaticWebAssets.props
+C:\Users\bt.stajyer\Desktop\MoodleIntegration\obj\Debug\net8.0\staticwebassets\msbuild.build.MoodleIntegration.props
+C:\Users\bt.stajyer\Desktop\MoodleIntegration\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.MoodleIntegration.props
+C:\Users\bt.stajyer\Desktop\MoodleIntegration\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.MoodleIntegration.props
+C:\Users\bt.stajyer\Desktop\MoodleIntegration\obj\Debug\net8.0\staticwebassets.pack.json
+C:\Users\bt.stajyer\Desktop\MoodleIntegration\obj\Debug\net8.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
+C:\Users\bt.stajyer\Desktop\MoodleIntegration\obj\Debug\net8.0\scopedcss\bundle\MoodleIntegration.styles.css
+C:\Users\bt.stajyer\Desktop\MoodleIntegration\obj\Debug\net8.0\scopedcss\projectbundle\MoodleIntegration.bundle.scp.css
+C:\Users\bt.stajyer\Desktop\MoodleIntegration\obj\Debug\net8.0\MoodleIntegration.dll
+C:\Users\bt.stajyer\Desktop\MoodleIntegration\obj\Debug\net8.0\refint\MoodleIntegration.dll
+C:\Users\bt.stajyer\Desktop\MoodleIntegration\obj\Debug\net8.0\MoodleIntegration.pdb
+C:\Users\bt.stajyer\Desktop\MoodleIntegration\obj\Debug\net8.0\MoodleIntegration.genruntimeconfig.cache
+C:\Users\bt.stajyer\Desktop\MoodleIntegration\obj\Debug\net8.0\ref\MoodleIntegration.dll
+C:\Users\bt.stajyer\Desktop\Yeni klasör (2)\MoodleIntegration\obj\Debug\net8.0\MoodleIntegration.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\bt.stajyer\Desktop\Yeni klasör (2)\MoodleIntegration\obj\Debug\net8.0\MoodleIntegration.AssemblyInfoInputs.cache
+C:\Users\bt.stajyer\Desktop\Yeni klasör (2)\MoodleIntegration\obj\Debug\net8.0\MoodleIntegration.AssemblyInfo.cs
+C:\Users\bt.stajyer\Desktop\Yeni klasör (2)\MoodleIntegration\obj\Debug\net8.0\MoodleIntegration.csproj.CoreCompileInputs.cache
+C:\Users\bt.stajyer\Desktop\Yeni klasör (2)\MoodleIntegration\obj\Debug\net8.0\MoodleIntegration.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\bt.stajyer\Desktop\Yeni klasör (2)\MoodleIntegration\obj\Debug\net8.0\MoodleIntegration.RazorAssemblyInfo.cache
+C:\Users\bt.stajyer\Desktop\Yeni klasör (2)\MoodleIntegration\obj\Debug\net8.0\MoodleIntegration.RazorAssemblyInfo.cs
+C:\Users\bt.stajyer\Desktop\Yeni klasör (2)\MoodleIntegration\obj\Debug\net8.0\MoodleIntegration.dll
+C:\Users\bt.stajyer\Desktop\Yeni klasör (2)\MoodleIntegration\obj\Debug\net8.0\refint\MoodleIntegration.dll
+C:\Users\bt.stajyer\Desktop\Yeni klasör (2)\MoodleIntegration\obj\Debug\net8.0\MoodleIntegration.pdb
+C:\Users\bt.stajyer\Desktop\Yeni klasör (2)\MoodleIntegration\bin\Debug\net8.0\appsettings.Development.json
+C:\Users\bt.stajyer\Desktop\Yeni klasör (2)\MoodleIntegration\bin\Debug\net8.0\appsettings.json
+C:\Users\bt.stajyer\Desktop\Yeni klasör (2)\MoodleIntegration\bin\Debug\net8.0\MoodleIntegration.staticwebassets.runtime.json
+C:\Users\bt.stajyer\Desktop\Yeni klasör (2)\MoodleIntegration\bin\Debug\net8.0\MoodleIntegration.exe
+C:\Users\bt.stajyer\Desktop\Yeni klasör (2)\MoodleIntegration\bin\Debug\net8.0\MoodleIntegration.deps.json
+C:\Users\bt.stajyer\Desktop\Yeni klasör (2)\MoodleIntegration\bin\Debug\net8.0\MoodleIntegration.runtimeconfig.json
+C:\Users\bt.stajyer\Desktop\Yeni klasör (2)\MoodleIntegration\bin\Debug\net8.0\MoodleIntegration.dll
+C:\Users\bt.stajyer\Desktop\Yeni klasör (2)\MoodleIntegration\bin\Debug\net8.0\MoodleIntegration.pdb
+C:\Users\bt.stajyer\Desktop\Yeni klasör (2)\MoodleIntegration\obj\Debug\net8.0\staticwebassets.build.json
+C:\Users\bt.stajyer\Desktop\Yeni klasör (2)\MoodleIntegration\obj\Debug\net8.0\staticwebassets.development.json
+C:\Users\bt.stajyer\Desktop\Yeni klasör (2)\MoodleIntegration\obj\Debug\net8.0\staticwebassets\msbuild.MoodleIntegration.Microsoft.AspNetCore.StaticWebAssets.props
+C:\Users\bt.stajyer\Desktop\Yeni klasör (2)\MoodleIntegration\obj\Debug\net8.0\staticwebassets\msbuild.build.MoodleIntegration.props
+C:\Users\bt.stajyer\Desktop\Yeni klasör (2)\MoodleIntegration\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.MoodleIntegration.props
+C:\Users\bt.stajyer\Desktop\Yeni klasör (2)\MoodleIntegration\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.MoodleIntegration.props
+C:\Users\bt.stajyer\Desktop\Yeni klasör (2)\MoodleIntegration\obj\Debug\net8.0\staticwebassets.pack.json
+C:\Users\bt.stajyer\Desktop\Yeni klasör (2)\MoodleIntegration\obj\Debug\net8.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
+C:\Users\bt.stajyer\Desktop\Yeni klasör (2)\MoodleIntegration\obj\Debug\net8.0\scopedcss\bundle\MoodleIntegration.styles.css
+C:\Users\bt.stajyer\Desktop\Yeni klasör (2)\MoodleIntegration\obj\Debug\net8.0\scopedcss\projectbundle\MoodleIntegration.bundle.scp.css
+C:\Users\bt.stajyer\Desktop\Yeni klasör (2)\MoodleIntegration\obj\Debug\net8.0\MoodleIntegration.genruntimeconfig.cache
+C:\Users\bt.stajyer\Desktop\Yeni klasör (2)\MoodleIntegration\obj\Debug\net8.0\ref\MoodleIntegration.dll
+C:\Users\bt.stajyer\Desktop\Yeni klasör (2)\MoodleIntegration\bin\Debug\net8.0\FluentFTP.dll
+C:\Users\bt.stajyer\Desktop\Yeni klasör (2)\MoodleIntegration\obj\Debug\net8.0\MoodleIntegration.csproj.AssemblyReference.cache
+C:\Users\bt.stajyer\Desktop\Yeni klasör (2)\MoodleIntegration\obj\Debug\net8.0\MoodleIn.C78C4C13.Up2Date
