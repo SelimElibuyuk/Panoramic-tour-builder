@@ -1,5 +1,5 @@
 import { stage, layer, transformer, hotspottransformer, sidebar2 } from './script.js';
-import { initViewer, showPanorama, resizeViewer, viewer } from '/panoromic_visit_builder/frontend/js/panorama/panorama.js';
+import { initViewer, showPanorama, resizeViewer, viewer, getViewer } from '/panoromic_visit_builder/frontend/js/panorama/panorama.js';
 import { getGroup } from './addgroup.js';
 
 
@@ -110,9 +110,8 @@ switchpanoramabutton.addEventListener('click', function () {
         return;
     }
 
-    konvaKutusu.style.visibility = 'hidden';
     panoramaKutusu.style.visibility = 'visible';
-    //konvaKutusu.classList.add('mini-map-modu');
+    konvaKutusu.classList.add('mini-map-modu');
     sidebar2.style.visibility = 'hidden';
 
     if (!getViewer()) {

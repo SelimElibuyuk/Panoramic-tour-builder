@@ -72,9 +72,16 @@ h2 {
     z-index: 10;
 }
 
-#container {
-    z-index: 20;
+#konva-container.mini-map-modu {
+    transform: scale(0.25); 
+    transform-origin: top right; 
+    background-image: none; 
+    background-color: rgba(255, 255, 255, 0.85); 
+    border-radius: 20px;
+    box-shadow: -4px 4px 15px rgba(0,0,0,0.4); 
+    pointer-events: none; 
 }
+
 
 
 li {
