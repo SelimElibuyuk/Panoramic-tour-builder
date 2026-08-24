@@ -45,20 +45,21 @@ h2 {
 
 .main-container {
     position: relative;
-    width: 800px;
-    height: 600px;
+    width: 1000px;
+    height: 700px;
     margin: 20px auto;
     border: 2px solid #ccc;
     overflow: visible;
     /* remove display: flex entirely */
 }
 
-#container, #konva-container {
+#container,
+#konva-container {
     position: absolute;
     top: 0;
     left: 0;
-    width: 800px;
-    height: 600px;
+    width: 1000px;
+    height: 700px;
     border: 2px dashed #ccc;
     background-color: #f8f9fa;
 }
@@ -73,13 +74,17 @@ h2 {
 }
 
 #konva-container.mini-map-modu {
-    transform: scale(0.25); 
-    transform-origin: top right; 
-    background-image: none; 
-    background-color: rgba(255, 255, 255, 0.85); 
+    transform: scale(0.25);
+    transform-origin: top right;
+    background-image: none;
+    background-color: rgba(255, 255, 255, 0.85);
     border-radius: 20px;
-    box-shadow: -4px 4px 15px rgba(0,0,0,0.4); 
-    pointer-events: none; 
+    box-shadow: -4px 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+#konva-container.mini-map-modu:hover {
+    transform: scale(0.45) translateY(-10px);
+    box-shadow: -4px 4px 20px rgba(0, 0, 0, 0.6);
 }
 
 

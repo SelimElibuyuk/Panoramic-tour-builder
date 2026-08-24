@@ -78,7 +78,7 @@ addNodebutton.addEventListener("click", function () {
         const newNode = new Konva.Circle({
             x: pos.x,
             y: pos.y,
-            radius: 7,
+            radius: 10,
             fill: 'lightblue',
             stroke: 'black',
             strokeWidth: 1,
@@ -119,7 +119,7 @@ switchpanoramabutton.addEventListener('click', function () {
     } else {
         showPanorama(path);     // reuse it after that
     }
-    showPanorama(panoramicpath);
+    showPanorama(path);
     resizeViewer();
 
     console.log('Switching to panorama view with path:', path);
