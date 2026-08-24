@@ -1,34 +1,53 @@
+
 import { Viewer } from '@photo-sphere-viewer/core';
 import { MarkersPlugin } from '@photo-sphere-viewer/markers-plugin';
 
-let path;
+let viewer = null;
+let markersPlugin = null;
 
-const viewer = new Viewer({
-    container: document.getElementById('container'),
-    panorama: path,
-    plugins: [
-        [MarkersPlugin, { markers: [] }],
-    ],
-    navbar: [],
+function initViewer(defaultPanorama) {
+    const container = document.getElementById('container');
+    if (!container) {
+        throw new Error('panorama.js: #container not found in DOM at init time');
+    }
 
-});
+    viewer = new Viewer({
+        container,
+        panorama: defaultPanorama,
+        plugins: [[MarkersPlugin, { markers: [] }]],
+        navbar: [],
+        description: 'Panoramic view of the room. Use mouse or touch to look around.',
+    });
 
-function panoramicScreen(path) {
-    console.log('panorama path received:', path, typeof path);
-    viewer.setPanorama(path);
+    markersPlugin = viewer.getPlugin(MarkersPlugin);
+
+    viewer.addEventListener('ready', () => console.log('viewer ready'));
+    viewer.addEventListener('click', ({ data }) => {
+        console.log('yaw:', data.yaw, 'pitch:', data.pitch);
+    });
+
+    return viewer;
 }
 
-panoramicScreen('assets/panorama/panorama.jfif');
+function showPanorama(path) {
+    if (!viewer) {
+        throw new Error('panorama.js: viewer not initialized yet — call initViewer first');
+    }
+    if (!path) {
+        console.warn('showPanorama called with no path');
+        return;
+    }
+    console.log('loading panorama:', path);
+    viewer.setPanorama(path).catch(err => {
+        console.error('Failed to load panorama:', path, err);
+    });
+}
 
-const markersPlugin = viewer.getPlugin(MarkersPlugin);
+function resizeViewer() {
+    if (viewer) viewer.needsUpdate?.();
+}
 
-viewer.addEventListener('ready', () => console.log('viewer ready'));
-
-// debug helper: click anywhere on the sphere to log its yaw/pitch
-// use this to calibrate your rotationOffset per panorama
-viewer.addEventListener('click', ({ data }) => {
-    console.log('yaw:', data.yaw, 'pitch:', data.pitch);
-});
-
-export { viewer, markersPlugin, panoramicScreen };
-console.log("Birleştirme işlemi tamamlandı. Yeni birleşik çokgen oluşturuldu.");
+function getViewer() {
+    return viewer;
+}
+export { initViewer, showPanorama, resizeViewer, getViewer, viewer, markersPlugin };

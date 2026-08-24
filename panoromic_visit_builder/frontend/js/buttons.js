@@ -1,5 +1,6 @@
 import { stage, layer, transformer, hotspottransformer, sidebar2 } from './script.js';
-import { viewer, markersPlugin, panoramicScreen } from '/panoromic_visit_builder/frontend/js/panorama/panorama.js';
+import { initViewer, showPanorama, resizeViewer, viewer } from '/panoromic_visit_builder/frontend/js/panorama/panorama.js';
+import { getGroup } from './addgroup.js';
 
 
 const removeObjectButton = document.getElementById('Remove-object-tool');
@@ -9,9 +10,12 @@ const finishbutton = document.getElementById('Finish');
 const switchpanoramabutton = document.getElementById('Switch-panorama-tool');
 const setpanoramabutton = document.getElementById('Set-panorama-tool');
 
+const konvaKutusu = document.getElementById('konva-container');
+const panoramaKutusu = document.getElementById('container');
 
 
-let panoramicpath;
+
+let panoramicpath = 'assets/panorama/panorama.jfif';
 
 function setPanoramicpath(path) {
     panoramicpath = path;
@@ -44,10 +48,14 @@ changecolorbutton.addEventListener('click', function () {
 
 finishbutton.addEventListener('click', function () {
     const butunObjeler = stage.find('.secilebilir-obje');
+    getGroup(butunObjeler);
 
-    butunObjeler.forEach(function (obje) {
+    const yeniObjeler = stage.find('.secilebilir-obje');
+
+    yeniObjeler.forEach(function (obje) {
         obje.draggable(false);
         obje.name('kilitli-obje'); // Transform aracını kaldır
+        console.log('Object locked:', obje.getAttrs());
     });
 
     transformer.nodes([]);
@@ -70,7 +78,7 @@ addNodebutton.addEventListener("click", function () {
         const newNode = new Konva.Circle({
             x: pos.x,
             y: pos.y,
-            radius: 10,
+            radius: 7,
             fill: 'lightblue',
             stroke: 'black',
             strokeWidth: 1,
@@ -92,11 +100,29 @@ addNodebutton.addEventListener("click", function () {
 });
 
 
-switchpanoramabutton.addEventListener('click', function () {
-    console.log('Switch panorama button clicked');
 
+
+switchpanoramabutton.addEventListener('click', function () {
     const selected = hotspottransformer.nodes();
     const path = selected[0]?.getAttr('panorama');
+    if (!path) {
+        console.warn('No panorama path set on selected node');
+        return;
+    }
 
-    panoramicScreen(path);
+    konvaKutusu.style.visibility = 'hidden';
+    panoramaKutusu.style.visibility = 'visible';
+    //konvaKutusu.classList.add('mini-map-modu');
+    sidebar2.style.visibility = 'hidden';
+
+    if (!getViewer()) {
+        initViewer(path);       // create it only the first time
+    } else {
+        showPanorama(path);     // reuse it after that
+    }
+    showPanorama(panoramicpath);
+    resizeViewer();
+
+    console.log('Switching to panorama view with path:', path);
+
 });

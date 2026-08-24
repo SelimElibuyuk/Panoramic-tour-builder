@@ -1,7 +1,7 @@
 
 // 1. Sahne (Stage) ve Katman (Layer) Kurulumu
 export const stage = new Konva.Stage({
-    container: 'container', // HTML'deki div id'si
+    container: document.getElementById('konva-container'),
     width: 800,
     height: 600,
 });
