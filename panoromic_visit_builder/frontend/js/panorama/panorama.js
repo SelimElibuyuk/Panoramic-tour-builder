@@ -31,3 +31,4 @@ viewer.addEventListener('click', ({ data }) => {
 });
 
 export { viewer, markersPlugin, panoramicScreen };
+console.log("Birleştirme işlemi tamamlandı. Yeni birleşik çokgen oluşturuldu.");
