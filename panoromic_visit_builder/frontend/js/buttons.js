@@ -14,7 +14,6 @@ const konvaKutusu = document.getElementById('konva-container');
 const panoramaKutusu = document.getElementById('container');
 
 
-
 let panoramicpath = 'assets/panorama/panorama.jfif';
 
 function setPanoramicpath(path) {
@@ -43,6 +42,7 @@ changecolorbutton.addEventListener('click', function () {
             obje.fill(rastgeleRenk);
         });
     }
+
 });
 
 
@@ -101,10 +101,10 @@ addNodebutton.addEventListener("click", function () {
 
 
 
+export function switchToPanoramaView([selectedNode]) {
 
-switchpanoramabutton.addEventListener('click', function () {
-    const selected = hotspottransformer.nodes();
-    const path = selected[0]?.getAttr('panorama');
+    const path = selectedNode?.getAttr('panorama');
+    console.log('Selected node panorama path:', path);
     if (!path) {
         console.warn('No panorama path set on selected node');
         return;
@@ -114,14 +114,25 @@ switchpanoramabutton.addEventListener('click', function () {
     konvaKutusu.classList.add('mini-map-modu');
     sidebar2.style.visibility = 'hidden';
 
+    const hotspotNodes = stage.find('.hotspot-obje');
+    hotspotNodes.forEach(node => {
+        node.setAttr('name', 'panorama-hotspot-obje');
+        console.log('Renamed node to panorama-hotspot-obje:', node.getAttr('name'));
+    });
+
     if (!getViewer()) {
-        initViewer(path);       // create it only the first time
+        initViewer(path);
     } else {
-        showPanorama(path);     // reuse it after that
+        showPanorama(path);
     }
     showPanorama(path);
     resizeViewer();
 
     console.log('Switching to panorama view with path:', path);
+};
 
+
+switchpanoramabutton.addEventListener('click', function () {
+    const selected = hotspottransformer.nodes();
+    switchToPanoramaView(selected);
 });

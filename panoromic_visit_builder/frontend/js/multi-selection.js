@@ -1,6 +1,11 @@
 import { stage, sidebar2, transformer, hotspottransformer } from "./script.js";
+import { switchToPanoramaView} from "./buttons.js";
+
+
 
 stage.on('click tap', function (e) {
+
+    const target = e.target;
 
     // Sahnedeki boş bir alana tıklanırsa tüm seçimi kaldır
     if (e.target === stage) {
@@ -10,7 +15,12 @@ stage.on('click tap', function (e) {
         return;
     }
 
-    const target = e.target;
+
+    if (target.hasName('panorama-hotspot-obje')) {
+        transformer.nodes([target]);
+        sidebar2.style.visibility = 'hidden';
+    }
+
 
     if (target.hasName('secilebilir-obje')) {
         transformer.nodes([target]);
@@ -28,7 +38,7 @@ stage.on('click tap', function (e) {
         return;
     }
 
-    sidebar2.style.visibility = 'visible';
+
 
     const metaPressed = e.evt.shiftKey || e.evt.ctrlKey || e.evt.metaKey;
     const activeTransformer = target.hasName('hotspot-obje') ? hotspottransformer : transformer;
