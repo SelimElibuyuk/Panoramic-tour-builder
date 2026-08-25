@@ -1,5 +1,5 @@
-import { stage, sidebar2, transformer, hotspottransformer } from "./script.js";
-import { switchToPanoramaView} from "./buttons.js";
+import { stage, sidebar2, transformer, hotspottransformer, } from "./script.js";
+import { switchToPanoramaView } from "./buttons.js";
 
 
 
@@ -14,13 +14,6 @@ stage.on('click tap', function (e) {
         sidebar2.style.visibility = 'hidden';
         return;
     }
-
-
-    if (target.hasName('panorama-hotspot-obje')) {
-        transformer.nodes([target]);
-        sidebar2.style.visibility = 'hidden';
-    }
-
 
     if (target.hasName('secilebilir-obje')) {
         transformer.nodes([target]);
