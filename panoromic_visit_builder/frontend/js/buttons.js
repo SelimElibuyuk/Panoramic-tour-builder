@@ -1,6 +1,8 @@
 import { stage, layer, transformer, hotspottransformer, sidebar2 } from './script.js';
-import { initViewer, showPanorama, resizeViewer, viewer, getViewer } from '/panoromic_visit_builder/frontend/js/panorama/panorama.js';
+import { initViewer, showPanorama, resizeViewer, getViewer, onViewerReady } from '/panoromic_visit_builder/frontend/js/panorama/panorama.js';
 import { getGroup } from './addgroup.js';
+import { addMarker } from '/panoromic_visit_builder/frontend/js/panorama/hotspots.js';
+import { addMarkersForNode } from './panorama/hotspots.js';
 
 
 const removeObjectButton = document.getElementById('Remove-object-tool');
@@ -25,7 +27,8 @@ setPanoramicpath('assets/panorama/Soissons_Cathedral_Interior_360x180,_Picardy,_
 removeObjectButton.addEventListener('click', function () {
     const seciliObjeler = transformer.nodes().concat(hotspottransformer.nodes());
     seciliObjeler.forEach((obj) => {
-        obj.destroy();
+        const target = obj.hasName('hotspot-obje') ? obj.getParent() : obj;
+        target.destroy();
     });
     sidebar2.style.visibility = 'hidden';
     transformer.nodes([]);
@@ -54,7 +57,7 @@ finishbutton.addEventListener('click', function () {
 
     yeniObjeler.forEach(function (obje) {
         obje.draggable(false);
-        obje.name('kilitli-obje'); // Transform aracını kaldır
+        obje.name('kilitli-obje');
         console.log('Object locked:', obje.getAttrs());
     });
 
@@ -79,7 +82,7 @@ addNodebutton.addEventListener("click", function () {
             x: pos.x,
             y: pos.y,
             name: 'hotspot-group',
-            draggable: false, // drag the pair together
+            draggable: false,
         });
 
         const nodeVision = new Konva.Circle({
@@ -90,8 +93,8 @@ addNodebutton.addEventListener("click", function () {
             stroke: 'blue',
             strokeWidth: 1,
             name: 'hotspot-vision',
-            listening: false,  // never intercepts clicks itself
-            visible: false,    // hidden until its sibling is selected
+            listening: false,
+            visible: false,
         });
 
         const newNode = new Konva.Circle({
@@ -138,8 +141,10 @@ export function switchToPanoramaView([selectedNode]) {
 
     if (!getViewer()) {
         initViewer(path);
+        onViewerReady(() => addMarkersForNode(selectedNode));
     } else {
         showPanorama(path);
+        addMarkersForNode(selectedNode);
     }
     stage.find('.hotspot-vision').forEach(v => v.visible(false));
     showPanorama(path);

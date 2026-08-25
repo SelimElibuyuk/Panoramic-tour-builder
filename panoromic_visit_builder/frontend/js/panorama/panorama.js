@@ -50,4 +50,10 @@ function resizeViewer() {
 function getViewer() {
     return viewer;
 }
-export { initViewer, showPanorama, resizeViewer, getViewer, viewer, markersPlugin };
+
+function onViewerReady(callback) {
+    if (!viewer) return;
+    viewer.addEventListener('ready', callback, { once: true });
+}
+
+export { initViewer, showPanorama, resizeViewer, getViewer, viewer, markersPlugin, onViewerReady };

@@ -3,6 +3,6 @@ import './script.js';
 import './shapes.js';
 import './multi-selection.js';
 import './buttons.js';
-import './removegroup.js';
 import './addgroup.js';
 import './panorama/panorama.js';
+import './panorama/hotspots.js';
