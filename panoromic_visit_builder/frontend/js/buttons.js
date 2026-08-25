@@ -75,9 +75,28 @@ addNodebutton.addEventListener("click", function () {
     stage.on("mousedown touchstart", function handler(e) {
 
         const pos = stage.getPointerPosition();
-        const newNode = new Konva.Circle({
+        const group = new Konva.Group({
             x: pos.x,
             y: pos.y,
+            name: 'hotspot-group',
+            draggable: true, // drag the pair together
+        });
+
+        const nodeVision = new Konva.Circle({
+            x: 0,
+            y: 0,
+            radius: 100,
+            fill: 'rgba(0, 0, 255, 0.1)',
+            stroke: 'blue',
+            strokeWidth: 1,
+            name: 'hotspot-vision',
+            listening: false,  // never intercepts clicks itself
+            visible: false,    // hidden until its sibling is selected
+        });
+
+        const newNode = new Konva.Circle({
+            x: 0,
+            y: 0,
             radius: 10,
             fill: 'lightblue',
             stroke: 'black',
@@ -87,14 +106,10 @@ addNodebutton.addEventListener("click", function () {
 
         newNode.setAttr('panorama', 'assets/panorama/panorama.jfif');
 
-        newNode.on('click tap', function (e) {
-            hotspottransformer.nodes([newNode]);
-            layer.draw();
-            sidebar2.style.visibility = 'visible';
-            e.cancelBubble = true; // stop it from reaching the stage-level deselect handler below
-        });
+        group.add(nodeVision);
+        group.add(newNode);
+        layer.add(group);
 
-        layer.add(newNode); // add to the layer, not the stage
         stage.off("mousedown touchstart", handler);
     });
 });

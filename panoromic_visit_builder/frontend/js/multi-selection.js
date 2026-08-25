@@ -1,5 +1,5 @@
 import { stage, sidebar2, transformer, hotspottransformer, } from "./script.js";
-import { switchToPanoramaView} from "./buttons.js";
+import { switchToPanoramaView } from "./buttons.js";
 
 
 
@@ -9,9 +9,11 @@ stage.on('click tap', function (e) {
 
     // Sahnedeki boş bir alana tıklanırsa tüm seçimi kaldır
     if (e.target === stage) {
+        stage.find('.hotspot-vision').forEach(v => v.visible(false));
         transformer.nodes([]);
         hotspottransformer.nodes([]);
         sidebar2.style.visibility = 'hidden';
+        stage.draw();
         return;
     }
 
@@ -21,8 +23,18 @@ stage.on('click tap', function (e) {
     }
 
     if (target.hasName('hotspot-obje')) {
+        // hide all other vision circles first
+        stage.find('.hotspot-vision').forEach(v => v.visible(false));
+
         hotspottransformer.nodes([target]);
         sidebar2.style.visibility = 'visible';
+
+        // show this node's own vision circle
+        const parentGroup = target.getParent();
+        const vision = parentGroup.findOne('.hotspot-vision');
+        if (vision) vision.visible(true);
+
+        stage.draw();
     }
 
     // Tıklanan şey bizim isimlendirdiğimiz objelerden biri değilse hiçbir şey yapma
