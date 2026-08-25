@@ -17,13 +17,21 @@ stage.on('click tap', function (e) {
         return;
     }
 
+    const konvaKutusu = document.getElementById('konva-container');
+
+        if(konvaKutusu.classList.contains('mini-map-modu')) {
+        if (target.hasName('panorama-hotspot-obje')) {
+            switchToPanoramaView([target]);
+        }
+        return;
+    }
+
     if (target.hasName('secilebilir-obje')) {
         transformer.nodes([target]);
         sidebar2.style.visibility = 'visible';
     }
 
     if (target.hasName('hotspot-obje')) {
-        // hide all other vision circles first
         stage.find('.hotspot-vision').forEach(v => v.visible(false));
 
         hotspottransformer.nodes([target]);

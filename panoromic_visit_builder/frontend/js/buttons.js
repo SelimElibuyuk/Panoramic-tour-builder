@@ -79,7 +79,7 @@ addNodebutton.addEventListener("click", function () {
             x: pos.x,
             y: pos.y,
             name: 'hotspot-group',
-            draggable: true, // drag the pair together
+            draggable: false, // drag the pair together
         });
 
         const nodeVision = new Konva.Circle({
@@ -133,6 +133,7 @@ export function switchToPanoramaView([selectedNode]) {
     hotspotNodes.forEach(node => {
         node.setAttr('name', 'panorama-hotspot-obje');
         console.log('Renamed node to panorama-hotspot-obje:', node.getAttr('name'));
+        stage.draw();
     });
 
     if (!getViewer()) {
@@ -140,6 +141,7 @@ export function switchToPanoramaView([selectedNode]) {
     } else {
         showPanorama(path);
     }
+    stage.find('.hotspot-vision').forEach(v => v.visible(false));
     showPanorama(path);
     resizeViewer();
 
