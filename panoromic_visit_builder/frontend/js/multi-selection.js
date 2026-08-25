@@ -1,5 +1,5 @@
 import { stage, sidebar2, transformer, hotspottransformer, } from "./script.js";
-import { switchToPanoramaView } from "./buttons.js";
+import { switchToPanoramaView} from "./buttons.js";
 
 
 
