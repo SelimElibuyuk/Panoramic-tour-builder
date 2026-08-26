@@ -3,6 +3,7 @@ import { initViewer, showPanorama, resizeViewer, getViewer, onViewerReady } from
 import { getGroup } from './addgroup.js';
 import { addMarker } from '/panoromic_visit_builder/frontend/js/panorama/hotspots.js';
 import { addMarkersForNode } from './panorama/hotspots.js';
+import { removeVisionCone } from '/panoromic_visit_builder/frontend/js/panorama/visioncone.js';
 
 
 const addNodebutton = document.getElementById('Node-tool');
@@ -19,7 +20,17 @@ const panoramaKutusu = document.getElementById('container');
 
 let panoramicpath = 'assets/panorama/panorama.jfif';
 
-function setPanoramicpath(path) {
+let selectedNode = null;
+
+export function setSelectedNode(node) {
+    selectedNode = node;
+}
+
+export function getSelectedNode() {
+    return selectedNode;
+}
+
+export function setPanoramicpath(path) {
     panoramicpath = path;
 }
 
@@ -50,11 +61,23 @@ changecolorbutton?.addEventListener('click', function () {
     const seciliObjeler = transformer.nodes().concat(hotspottransformer.nodes()).concat(objecttransformer.nodes());
 
     seciliObjeler.forEach(function (obje) {
-        const rastgeleRenk = '#' + Math.floor(Math.random() * 16777216).toString(16).padStart(6, '0');
+        const rastgeleRenk = '#008000';
         obje.fill(rastgeleRenk);
     });
 
 });
+
+function changeColor(node) {
+
+    node.fill('#008000');
+    stage.draw();
+}
+function resetColor(node) {
+
+    node.fill('black');
+    stage.draw();
+
+}
 
 
 finishbutton?.addEventListener('click', function () {
@@ -112,7 +135,7 @@ addNodebutton?.addEventListener("click", function () {
             x: 0,
             y: 0,
             radius: 10,
-            fill: 'lightblue',
+            fill: 'black',
             stroke: 'black',
             strokeWidth: 1,
             name: 'hotspot-obje',
@@ -154,17 +177,27 @@ addObjectButton?.addEventListener('click', function () {
 
 });
 
-
+let previouslySelectedNode = null;
 
 export function switchToPanoramaView([selectedNode]) {
 
     const path = selectedNode?.getAttr('panorama');
-    console.log('Selected node panorama path:', path);
     if (!path) {
         console.warn('No panorama path set on selected node');
         return;
     }
+    if (previouslySelectedNode && previouslySelectedNode !== selectedNode) {
+        resetColor(previouslySelectedNode);
+    }
 
+    changeColor(selectedNode);
+    if(previouslySelectedNode){
+        removeVisionCone(previouslySelectedNode);
+    }
+
+    previouslySelectedNode = selectedNode;
+    setSelectedNode(selectedNode);
+    
     panoramaKutusu.style.visibility = 'visible';
     konvaKutusu.classList.add('mini-map-modu');
     sidebar2.style.visibility = 'hidden';
@@ -173,7 +206,6 @@ export function switchToPanoramaView([selectedNode]) {
     const hotspotNodes = stage.find('.hotspot-obje');
     hotspotNodes.forEach(node => {
         node.setAttr('name', 'panorama-hotspot-obje');
-        console.log('Renamed node to panorama-hotspot-obje:', node.getAttr('name'));
         stage.draw();
     });
 
@@ -201,4 +233,5 @@ switchpanoramabutton?.addEventListener('click', function () {
     const selected = hotspottransformer.nodes();
     switchToPanoramaView(selected);
 });
+
 

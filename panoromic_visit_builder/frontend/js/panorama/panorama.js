@@ -4,6 +4,7 @@ import { MarkersPlugin } from '@photo-sphere-viewer/markers-plugin';
 
 let viewer = null;
 let markersPlugin = null;
+let pendingReadyCallbacks = [];
 
 function initViewer(defaultPanorama) {
     const container = document.getElementById('container');
@@ -18,6 +19,10 @@ function initViewer(defaultPanorama) {
         navbar: [],
         description: 'Panoramic view of the room. Use mouse or touch to look around.',
     });
+    viewer.rotate({
+        yaw: 1.5,
+        pitch: 0,
+    });
 
     markersPlugin = viewer.getPlugin(MarkersPlugin);
 
@@ -25,6 +30,11 @@ function initViewer(defaultPanorama) {
     viewer.addEventListener('click', ({ data }) => {
         console.log('yaw:', data.yaw, 'pitch:', data.pitch);
     });
+    viewer.addEventListener('ready', () => {
+        pendingReadyCallbacks.forEach(cb => cb());
+        pendingReadyCallbacks = [];
+    }, { once: true });
+
 
     return viewer;
 }
@@ -52,7 +62,11 @@ function getViewer() {
 }
 
 function onViewerReady(callback) {
-    if (!viewer) return;
+    if (!viewer) {
+        // viewer doesn't exist yet — queue this callback for later
+        pendingReadyCallbacks.push(callback);
+        return;
+    }
     viewer.addEventListener('ready', callback, { once: true });
 }
 
