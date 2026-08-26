@@ -1,9 +1,9 @@
 import { layer, sidebar2, transformer, gridbound } from "./script.js";
 
-const addgroupebutton = document.getElementById('Group-tool');
 
-addgroupebutton.addEventListener('click', function () {
-    const seciliObjeler = transformer.nodes();
+
+export function getGroup(selectedObjects) {
+    const seciliObjeler = selectedObjects;
 
     if (seciliObjeler.length < 2) {
         console.log("Birleştirme yapmak için en az 2 obje seçmelisiniz.");
@@ -114,4 +114,4 @@ addgroupebutton.addEventListener('click', function () {
     transformer.nodes([]);
     layer.draw();
     console.log(layer.getChildren());
-});
+};

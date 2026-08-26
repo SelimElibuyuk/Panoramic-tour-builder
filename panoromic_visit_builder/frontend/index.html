@@ -9,7 +9,20 @@
     <script src="https://unpkg.com/konva@9/konva.min.js" , defer></script>
     <script src="https://unpkg.com/konva@9/konva.min.js"></script>
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core@5/index.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/markers-plugin@5/index.css" />
+
     <script src="https://cdn.jsdelivr.net/npm/polybooljs@1.2.0/dist/polybool.min.js"></script>
+
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "@photo-sphere-viewer/core": "https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core@5/index.module.js",
+        "@photo-sphere-viewer/markers-plugin": "https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/markers-plugin@5/index.module.js"
+      }
+    }
+    </script>
 
 
 </head>
@@ -18,35 +31,83 @@
     <div id="side-bar">
         <h2>Tools</h2>
         <li>
-            <button id="rectangle-tool">Rectangle</button>
+            <button id="rectangle-tool">
+                <span class="button_top"> Rectangle </span>
+            </button>
         </li>
         <li>
-            <button id="Circle-tool">Circle</button>
+            <button id="Circle-tool">
+                <span class="button_top"> Circle </span>
+            </button>
         </li>
         <li>
-            <button id="Group-tool">Group</button>
-        </li>
-        </li>
-        <li>
-            <button id="Finish">Finish</button>
+            <button id="Finish">
+                <span class="button_top"> Finish Room </span>
+            </button>
         </li>
         <li>
-            <button id="Node-tool">Add Node</button>
-        </li>
+            <button id="Node-tool">
+                <span class="button_top"> Add Node </span>
+            </button>
         </li>
         <li>
-            <button id="Group-remove-tool" , style="color: red;">Group Remove</button>
+            <button id="Object-tool">
+                <span class="button_top"> Add Object </span>
+            </button>
         </li>
+        <li>
+            <button id="Switch-panorama-tool">
+                <span class="button_top"> Switch Panorama </span>
+            </button>
+        </li>
+
+
     </div>
-    <div id='container'></div>
+    <div class='main-container'>
+
+        <div id="konva-container"></div>
+
+        <div id="container"></div>
+    </div>
+
+
     <div id="side-bar2">
         <h2>Properties</h2>
         <div id="properties">
             <li>
-                <button id="Change-color-tool">Change Color</button>
+                <button id="Change-color-tool">
+                    <span class="button_top"> Change Color </span>
+                </button>
             </li>
             <li>
-                <button id="Remove-object-tool">Remove Object</button>
+                <button id="Set-panorama-tool">
+                    <span class="button_top"> Set Panorama </span>
+                </button>
+            </li>
+            <li>
+                <button id="Remove-object-tool", class="remove-item">
+                    <span class="button_top"> Remove Object </span>
+                </button>
+            </li>
+        </div>
+    </div>
+        <div id="object-side-bar">
+        <h2>Properties</h2>
+        <div id="properties">
+            <li>
+                <button id="Change-color-tool">
+                    <span class="button_top"> Change Color </span>
+                </button>
+            </li>
+            <li>
+                <button id="Set-object-tool">
+                    <span class="button_top"> Set Object </span>
+                </button>
+            </li>
+            <li>
+                <button id="Remove-object-tool", class="remove-item">
+                    <span class="button_top"> Remove Object </span>
+                </button>
             </li>
         </div>
     </div>

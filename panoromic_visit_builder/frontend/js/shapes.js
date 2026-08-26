@@ -7,7 +7,6 @@ addrectanglebutton.addEventListener('click', function () {
     const newRectangle = new Konva.Rect({
         x: 50, y: 50, width: 100, height: 50,
         fill: '#8a8a8a',
-        stroke: '#000', strokeWidth: 1,
         draggable: true,
         name: 'secilebilir-obje', // Tüm şekiller bu ismi almalı
         dragBoundFunc: function (pos) {
@@ -26,7 +25,7 @@ addrectanglebutton.addEventListener('click', function () {
 function newCircle() {
     const newCircle = new Konva.Circle({
         x: 100, y: 100, radius: 50,
-        fill: '#8a8a8a', stroke: '#000', strokeWidth: 1,
+        fill: '#8a8a8a',
         draggable: true,
         name: 'secilebilir-obje', // Tüm şekiller bu ismi almalı
         dragBoundFunc: function (pos) {
@@ -42,3 +41,5 @@ function newCircle() {
 };
 
 addcirclebutton.addEventListener('click', newCircle);
+
+
