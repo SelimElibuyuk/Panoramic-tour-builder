@@ -85,4 +85,28 @@ export const hotspottransformer = new Konva.Transformer({
 })
 layer.add(hotspottransformer);
 
+export const objecttransformer = new Konva.Transformer({
+    keepRatio: false,
+    resizeEnabled: false,
+    rotateEnabled: false,
+})
+layer.add(objecttransformer);
+
+export const visiontransformer = new Konva.Transformer({
+    rotateEnabled: false,
+    keepRatio: true,
+    enabledAnchors: ['top-left', 'top-right', 'bottom-left', 'bottom-right'],
+    centeredScaling: true,
+    boundBoxFunc: (oldBox, newBox) => {
+        // prevent negative/too-small size
+        if (newBox.width < 10 || newBox.height < 10) {
+            return oldBox;
+        }
+        return newBox;
+    }
+});
+layer.add(visiontransformer);
+
+
 export const sidebar2 = document.getElementById('side-bar2');
+export const objectsidebar = document.getElementById('object-side-bar');

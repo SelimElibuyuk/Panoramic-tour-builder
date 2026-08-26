@@ -1,7 +1,5 @@
-import { stage, sidebar2, transformer, hotspottransformer, } from "./script.js";
+import { stage, sidebar2, transformer, hotspottransformer, objecttransformer, objectsidebar, visiontransformer, layer } from "./script.js";
 import { switchToPanoramaView } from "./buttons.js";
-
-
 
 stage.on('click tap', function (e) {
 
@@ -12,18 +10,26 @@ stage.on('click tap', function (e) {
         stage.find('.hotspot-vision').forEach(v => v.visible(false));
         transformer.nodes([]);
         hotspottransformer.nodes([]);
+        visiontransformer.nodes([]);
+        objecttransformer.nodes([]);
         sidebar2.style.visibility = 'hidden';
+        objectsidebar.style.visibility = 'hidden';
         stage.draw();
         return;
     }
 
     const konvaKutusu = document.getElementById('konva-container');
 
-        if(konvaKutusu.classList.contains('mini-map-modu')) {
+    if (konvaKutusu.classList.contains('mini-map-modu')) {
         if (target.hasName('panorama-hotspot-obje')) {
             switchToPanoramaView([target]);
         }
         return;
+    }
+
+    if (target.hasName('object-obje')) {
+        objecttransformer.nodes([target]);
+        objectsidebar.style.visibility = 'visible';
     }
 
     if (target.hasName('secilebilir-obje')) {
@@ -40,10 +46,20 @@ stage.on('click tap', function (e) {
         // show this node's own vision circle
         const parentGroup = target.getParent();
         const vision = parentGroup.findOne('.hotspot-vision');
-        if (vision) vision.visible(true);
+        if (vision) {
+            vision.visible(true);
+            vision.moveToTop(); // so it's not hidden under other groups visually
+
+            // attach a transformer to let the user resize it
+            visiontransformer.nodes([vision]);
+            visiontransformer.moveToTop();
+            stage.draw();
+        }
 
         stage.draw();
     }
+
+
 
     // Tıklanan şey bizim isimlendirdiğimiz objelerden biri değilse hiçbir şey yapma
     if (!target.hasName('secilebilir-obje') && !target.hasName('hotspot-obje')) {
