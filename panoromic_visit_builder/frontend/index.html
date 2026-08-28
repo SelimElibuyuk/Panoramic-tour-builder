@@ -60,6 +60,17 @@
                 <span class="button_top"> Switch Panorama </span>
             </button>
         </li>
+        <li>
+            <button id="Save-tool">
+                <span class="button_top"> Save </span>
+            </button>
+        </li>
+        <li> <button id="btn-load-tours">
+                <span class="button_top">Kayıtlı Turlarım</span>
+            </button>
+        </li>
+
+
 
 
     </div>
@@ -85,13 +96,13 @@
                 </button>
             </li>
             <li>
-                <button id="Remove-object-tool", class="remove-item">
+                <button id="Remove-object-tool" , class="remove-item">
                     <span class="button_top"> Remove Object </span>
                 </button>
             </li>
         </div>
     </div>
-        <div id="object-side-bar">
+    <div id="object-side-bar">
         <h2>Properties</h2>
         <div id="properties">
             <li>
@@ -105,10 +116,22 @@
                 </button>
             </li>
             <li>
-                <button id="Remove-object-tool", class="remove-item">
+                <button id="Remove-object-tool" , class="remove-item">
                     <span class="button_top"> Remove Object </span>
                 </button>
             </li>
+        </div>
+    </div>
+
+    <div id="tours-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Kayıtlı Showroomlar</h2>
+                <span id="close-tours-modal" class="close-btn">&times;</span>
+            </div>
+            <div id="tours-list-container">
+                <!-- Turlar buraya JavaScript ile eklenecek -->
+            </div>
         </div>
     </div>
     <script type="module" src="js/main.js"></script>

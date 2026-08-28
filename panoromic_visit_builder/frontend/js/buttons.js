@@ -1,7 +1,6 @@
 import { stage, layer, transformer, hotspottransformer, sidebar2, objectsidebar, objecttransformer, visiontransformer } from './script.js';
 import { initViewer, showPanorama, resizeViewer, getViewer, onViewerReady } from '/panoromic_visit_builder/frontend/js/panorama/panorama.js';
 import { getGroup } from './addgroup.js';
-import { addMarker } from '/panoromic_visit_builder/frontend/js/panorama/hotspots.js';
 import { addMarkersForNode } from './panorama/hotspots.js';
 import { removeVisionCone } from '/panoromic_visit_builder/frontend/js/panorama/visioncone.js';
 
