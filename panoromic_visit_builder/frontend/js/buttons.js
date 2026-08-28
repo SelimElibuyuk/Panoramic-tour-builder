@@ -102,7 +102,6 @@ setpanoramabutton?.addEventListener('click', function () {
     if (!object) return;
 
     object.setAttr('panorama', panoramicpath);
-    console.log('Panorama path set for object:', panoramicpath);
 });
 
 

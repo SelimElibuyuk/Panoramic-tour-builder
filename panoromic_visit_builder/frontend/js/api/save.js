@@ -10,6 +10,15 @@ saveMapButton.addEventListener('click', function () {
     console.log("Save button clicked. Preparing to save the map...");
 });
 
+function captureStagePreview() {
+    // renders the current stage to a PNG data URL for use as a thumbnail
+    // pixelRatio controls resolution/size — lower = smaller file, blurrier image
+    return stage.toDataURL({
+        mimeType: 'image/png',
+        pixelRatio: 0.4
+    });
+}
+
 saveMapButton.addEventListener('click', async function () {
     // 1. Eğer bu yepyeni bir tursa (henüz ID'si yoksa) kullanıcıdan isim isteyelim
     if (!window.aktifTurId) {
@@ -22,14 +31,20 @@ saveMapButton.addEventListener('click', async function () {
         window.aktifTurId = "tour_" + Date.now();
     }
 
-    // 2. Veriyi doğrudan yollamak yerine bir zarfın (JSON) içine koyuyoruz
+    // 2. Sahnenin anlık görüntüsünü (thumbnail) yakalıyoruz
+    const previewImageBase64 = captureStagePreview();
+
+    // 3. Veriyi doğrudan yollamak yerine bir zarfın (JSON) içine koyuyoruz
     const payload = {
         id: window.aktifTurId,
         name: window.aktifTurAdi,
         tarih: new Date().toLocaleString(),
         // stage.toJSON() bize string döner, onu tekrar objeye çeviriyoruz ki 
         // Python tarafında temiz bir JSON ağacı olarak kaydedilsin
-        konva_data: JSON.parse(stage.toJSON())
+        konva_data: JSON.parse(stage.toJSON()),
+        // önizleme görselini base64 olarak yolluyoruz, backend bunu dosyaya çevirip
+        // yolunu (path) tour_data.json içine kaydedecek
+        preview_image_base64: previewImageBase64
     };
 
     console.log("Gönderilen Veri Paketi:", payload);

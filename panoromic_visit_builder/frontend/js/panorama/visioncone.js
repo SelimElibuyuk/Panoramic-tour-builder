@@ -29,7 +29,6 @@ function updateVisionCone(node, yaw, radius) {
     const yawDegrees = (yaw * 180 / Math.PI);
     cone.rotation(yawDegrees - cone.angle() / 2 - 90); // -90 shifts "north" to "up"
     group.getLayer().batchDraw();
-    stage.draw();
 }
 
 export function removeVisionCone(node) {
@@ -40,21 +39,28 @@ export function removeVisionCone(node) {
     }
 }
 
+let visionConeListenersAdded = false;
+
 onViewerReady(() => {
     const viewer = getViewer();
-    console.log('Viewer is ready, setting up position-updated listener for vision cone.');
-    viewer.addEventListener('position-updated', ({ position }) => {
-        const selectedNode = getSelectedNode();
-        const radius = findRadiusForNode(selectedNode);
-        if (selectedNode) {
-            updateVisionCone(selectedNode, position.yaw, radius);
-        }
-    });
-    viewer.addEventListener('ready', () => {
-        const selectedNode = getSelectedNode();
-        const radius = findRadiusForNode(selectedNode);
-        if (selectedNode) {
-            updateVisionCone(selectedNode, 0, radius);
-        }
-    });
+    
+    if (!visionConeListenersAdded) {
+        
+        viewer.addEventListener('position-updated', ({ position }) => {
+            const selectedNode = getSelectedNode();
+            if (selectedNode) {
+                const radius = findRadiusForNode(selectedNode);
+                updateVisionCone(selectedNode, position.yaw, radius);
+            }
+        });
+        
+        viewer.addEventListener('ready', () => {
+            const selectedNode = getSelectedNode();
+            if (selectedNode) {
+                const radius = findRadiusForNode(selectedNode);
+                updateVisionCone(selectedNode, 0, radius);
+            }
+        });
+        visionConeListenersAdded = true; 
+    }
 });

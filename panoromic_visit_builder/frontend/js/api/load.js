@@ -5,14 +5,94 @@ const modalOverlay = document.getElementById('tours-modal');
 const btnCloseModal = document.getElementById('close-tours-modal');
 const toursListContainer = document.getElementById('tours-list-container');
 
+// preview modal elements
+const previewModal = document.getElementById('tour-preview-modal');
+const btnClosePreview = document.getElementById('close-preview-modal');
+const previewName = document.getElementById('preview-tour-name');
+const previewImage = document.getElementById('preview-tour-image');
+const previewDate = document.getElementById('preview-tour-date');
+const previewBtnLoad = document.getElementById('preview-btn-load');
+const previewBtnDelete = document.getElementById('preview-btn-delete');
+
+let activeTour = null; // the tour object currently shown in the preview modal
+
 // Modalı kapatma işlemleri
 btnCloseModal.addEventListener('click', () => modalOverlay.classList.remove('active'));
 modalOverlay.addEventListener('click', (e) => {
     if (e.target === modalOverlay) modalOverlay.classList.remove('active');
 });
 
-// "Kayıtlı Turlarım" butonuna tıklandığında çalışacak ana kod
-btnLoadTours.addEventListener('click', async function () {
+btnClosePreview.addEventListener('click', () => previewModal.classList.remove('active'));
+previewModal.addEventListener('click', (e) => {
+    if (e.target === previewModal) previewModal.classList.remove('active');
+});
+
+function openPreviewModal(tur) {
+    activeTour = tur;
+    previewName.textContent = tur.name;
+    previewDate.textContent = `Son Güncelleme: ${tur.tarih}`;
+
+    // build the full URL to the backend, since preview_image is a relative path
+    previewImage.src = tur.preview_image
+        ? `http://127.0.0.1:8000${tur.preview_image}`
+        : '';
+
+    previewModal.classList.add('active');
+}
+
+function loadTour(tur) {
+    console.log("Seçilen Tur Verisi:", tur);
+
+    window.aktifTurId = tur.id;
+    window.aktifTurAdi = tur.name;
+
+    const eskiCizimler = stage.find('.secilebilir-obje, .kilitli-obje, .gruplanmis-parca, .panorama-hotspot-obje');
+    eskiCizimler.forEach(obje => obje.destroy());
+
+    transformer.nodes([]);
+
+    const kaydedilmisSekiller = tur.konva_data.children[0].children;
+
+    kaydedilmisSekiller.forEach(sekilVerisi => {
+        if (sekilVerisi.className !== 'Transformer') {
+            const yeniObje = Konva.Node.create(sekilVerisi);
+            layer.add(yeniObje);
+        }
+    });
+
+    layer.draw();
+    modalOverlay.classList.remove('active');
+    previewModal.classList.remove('active');
+
+    alert(`'${tur.name}' projesi başarıyla yüklendi!`);
+}
+
+async function deleteTour(tur) {
+    if (!confirm(`'${tur.name}' adlı showroomu silmek istediğinize emin misiniz?`)) return;
+
+    try {
+        const response = await fetch(`http://127.0.0.1:8000/api/delete-tour/${tur.id}`, {
+            method: 'DELETE'
+        });
+        if (!response.ok) throw new Error('Silme işlemi başarısız oldu');
+
+        previewModal.classList.remove('active');
+        loadToursList();
+    } catch (error) {
+        console.error("Tur silinirken hata:", error);
+        alert("Showroom silinirken bir hata oluştu.");
+    }
+}
+
+previewBtnLoad.addEventListener('click', () => {
+    if (activeTour) loadTour(activeTour);
+});
+
+previewBtnDelete.addEventListener('click', () => {
+    if (activeTour) deleteTour(activeTour);
+});
+
+async function loadToursList() {
     modalOverlay.classList.add('active');
     toursListContainer.innerHTML = '<p style="text-align:center; color:#333;">Turlar yükleniyor...</p>';
 
@@ -31,59 +111,15 @@ btnLoadTours.addEventListener('click', async function () {
             const card = document.createElement('div');
             card.className = 'tour-card';
 
-            // Yükle ve Sil butonlarını aynı div (tour-actions) içine alıyoruz
             card.innerHTML = `
                 <div class="tour-info">
                     <h4>${tur.name}</h4>
                     <p>Son Güncelleme: ${tur.tarih}</p>
                 </div>
-                <div class="tour-actions">
-                    <button class="btn-load-tour" data-id="${tur.id}">Yükle</button>
-                    <button class="btn-delete-tour" data-id="${tur.id}">Sil</button>
-                </div>
             `;
 
-            const yukleBtn = card.querySelector('.btn-load-tour');
-            yukleBtn.addEventListener('click', () => {
-                console.log("Seçilen Tur Verisi:", tur);
-
-                // 1. Proje Kimliğini Güncelle (Çok Önemli!)
-                // Bu sayede projeyi yükleyip tekrar "Kaydet"e bastığında yeni proje oluşturmaz, mevcudu günceller.
-                window.aktifTurId = tur.id;
-                window.aktifTurAdi = tur.name;
-
-                // 2. Mevcut Sahneyi Temizle (Sadece Çizimleri)
-                // Transformer'a ve görünmez seçim kutusuna zarar vermemek için sadece kendi isimlendirdiğimiz objeleri siliyoruz
-                const eskiCizimler = stage.find('.secilebilir-obje, .kilitli-obje, .gruplanmis-parca, .panorama-hotspot-obje');
-                eskiCizimler.forEach(obje => obje.destroy());
-
-                // Transformer'ın hafızasında kalanları temizle
-                transformer.nodes([]);
-
-                // 3. JSON'dan Gelen Veriyi Katmana (Layer) Enjekte Et
-                // Konva JSON hiyerarşisi: Stage -> Layer (children[0]) -> Şekiller (children[0].children)
-                const kaydedilmisSekiller = tur.konva_data.children[0].children;
-
-                kaydedilmisSekiller.forEach(sekilVerisi => {
-                    // Kaydedilmiş eski Transformer kalıntılarını sahneye tekrar basmamak için filtreliyoruz
-                    if (sekilVerisi.className !== 'Transformer') {
-
-                        // JSON verisini gerçek, fiziksel Konva objesine dönüştür
-                        const yeniObje = Konva.Node.create(sekilVerisi);
-
-                        // Objeyi mevcut katmanımıza (layer) ekle
-                        layer.add(yeniObje);
-                    }
-                });
-
-                // 4. Ekrana Çizdir ve Modalı Kapat
-                layer.draw();
-                modalOverlay.classList.remove('active');
-
-                // (Opsiyonel) Sidebar'a projenin adını yazdırabilirsin
-                // document.getElementById('sidebar-baslik').textContent = aktifTurAdi;
-
-                alert(`'${tur.name}' projesi başarıyla yüklendi!`);
+            card.addEventListener('click', () => {
+                openPreviewModal(tur);
             });
 
             toursListContainer.appendChild(card);
@@ -93,4 +129,7 @@ btnLoadTours.addEventListener('click', async function () {
         console.error("Turları çekerken hata:", error);
         toursListContainer.innerHTML = '<p style="color:red; text-align:center;">Sunucuya bağlanılamadı. Backend açık mı?</p>';
     }
-});
+}
+
+// "Kayıtlı Turlarım" butonuna tıklandığında çalışacak ana kod
+btnLoadTours.addEventListener('click', loadToursList);

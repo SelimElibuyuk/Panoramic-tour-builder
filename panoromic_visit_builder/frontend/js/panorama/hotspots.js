@@ -42,19 +42,7 @@ export function addMarker(yaw, pitch, targetNode = null) {
                 targetNodeRef: targetNode
             }
         });
-
-
-
     }
-    markersPlugin.addEventListener('select-marker', ({ marker }) => {
-        // Marker'ın verisini kontrol et
-        if (marker.data && marker.data.targetNodeRef) {
-            const hedefNode = marker.data.targetNodeRef;
-            switchToPanoramaView([hedefNode]);
-        } else {
-            console.warn('Tıklanan marker bir hedef node referansı içermiyor.');
-        }
-    });
 }
 
 export function findRadiusForNode(centerNode) {

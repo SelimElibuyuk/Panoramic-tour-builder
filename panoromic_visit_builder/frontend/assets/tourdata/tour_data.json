@@ -1,12 +1,12 @@
 [
     {
-        "id": "tour_1787900651482",
-        "name": "123",
-        "tarih": "28.08.2026 10:26:21",
+        "id": "tour_1787918086788",
+        "name": "deneme",
+        "tarih": "28.08.2026 14:54:46",
         "konva_data": {
             "attrs": {
-                "width": 800,
-                "height": 600
+                "width": 1200,
+                "height": 800
             },
             "className": "Stage",
             "children": [
@@ -33,182 +33,8 @@
                                     "middle-left",
                                     "middle-right"
                                 ],
-                                "x": 196,
-                                "y": 146
-                            },
-                            "className": "Transformer"
-                        },
-                        {
-                            "attrs": {
-                                "keepRatio": false,
-                                "resizeEnabled": false,
-                                "rotateEnabled": false
-                            },
-                            "className": "Transformer"
-                        },
-                        {
-                            "attrs": {
-                                "keepRatio": false,
-                                "resizeEnabled": false,
-                                "rotateEnabled": false
-                            },
-                            "className": "Transformer"
-                        },
-                        {
-                            "attrs": {
-                                "fill": "rgba(0,0,255,0.5)",
-                                "visible": false,
-                                "x": 90,
-                                "y": 300
-                            },
-                            "className": "Rect"
-                        },
-                        {
-                            "attrs": {
-                                "fill": "rgba(0,0,255,0.5)",
-                                "visible": false,
-                                "x": 93,
-                                "y": 321
-                            },
-                            "className": "Rect"
-                        },
-                        {
-                            "attrs": {
-                                "fill": "rgba(0,0,255,0.5)",
-                                "visible": false
-                            },
-                            "className": "Rect"
-                        },
-                        {
-                            "attrs": {
-                                "x": 212,
-                                "y": 203,
-                                "width": 100,
-                                "height": 50,
-                                "fill": "#8a8a8a",
-                                "draggable": true,
-                                "name": "secilebilir-obje",
-                                "scaleX": 4.799999999999999,
-                                "scaleY": 6.4
-                            },
-                            "className": "Rect"
-                        },
-                        {
-                            "attrs": {
-                                "x": 250,
-                                "y": 202,
-                                "radius": 50,
-                                "fill": "#8a8a8a",
-                                "draggable": true,
-                                "name": "secilebilir-obje"
-                            },
-                            "className": "Circle"
-                        },
-                        {
-                            "attrs": {
-                                "x": 349,
-                                "y": 294,
-                                "width": 20,
-                                "height": 20,
-                                "fill": "lightblue",
-                                "stroke": "black",
-                                "strokeWidth": 1,
-                                "name": "object-obje",
-                                "id": "object-nk4u45347"
-                            },
-                            "className": "Rect"
-                        },
-                        {
-                            "attrs": {
-                                "x": 545,
-                                "y": 329,
-                                "name": "hotspot-group",
-                                "id": "hotspot-group-ukx8197is"
-                            },
-                            "className": "Group",
-                            "children": [
-                                {
-                                    "attrs": {
-                                        "radius": 10,
-                                        "fill": "black",
-                                        "stroke": "black",
-                                        "strokeWidth": 1,
-                                        "name": "hotspot-obje",
-                                        "id": "hotspot-lm9ztddhx",
-                                        "panorama": "assets/panorama/panorama.jfif"
-                                    },
-                                    "className": "Circle"
-                                },
-                                {
-                                    "attrs": {
-                                        "x": -3.827182746792177e-13,
-                                        "y": 3.679276041213923e-13,
-                                        "radius": 200,
-                                        "fill": "rgba(0, 0, 255, 0.1)",
-                                        "stroke": "blue",
-                                        "strokeWidth": 1,
-                                        "name": "hotspot-vision",
-                                        "listening": false,
-                                        "visible": false,
-                                        "scaleX": 1.649163590695957,
-                                        "scaleY": 1.6491635906959572
-                                    },
-                                    "className": "Circle"
-                                }
-                            ]
-                        },
-                        {
-                            "attrs": {
-                                "rotateEnabled": false,
-                                "enabledAnchors": [
-                                    "top-left",
-                                    "top-right",
-                                    "bottom-left",
-                                    "bottom-right"
-                                ],
-                                "centeredScaling": true
-                            },
-                            "className": "Transformer"
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "id": "tour_1787903308489",
-        "name": "deneme123",
-        "tarih": "28.08.2026 10:49:12",
-        "konva_data": {
-            "attrs": {
-                "width": 800,
-                "height": 600
-            },
-            "className": "Stage",
-            "children": [
-                {
-                    "attrs": {},
-                    "className": "Layer",
-                    "children": [
-                        {
-                            "attrs": {
-                                "rotationSnaps": [
-                                    0,
-                                    90,
-                                    180,
-                                    270
-                                ],
-                                "keepRatio": false,
-                                "enabledAnchors": [
-                                    "top-left",
-                                    "top-right",
-                                    "bottom-left",
-                                    "bottom-right",
-                                    "top-center",
-                                    "bottom-center",
-                                    "middle-left",
-                                    "middle-right"
-                                ]
+                                "x": 466,
+                                "y": 287
                             },
                             "className": "Transformer"
                         },
@@ -245,242 +71,30 @@
                             "attrs": {
                                 "fill": "rgba(0,0,255,0.5)",
                                 "visible": false,
-                                "x": 75,
-                                "y": 543
-                            },
-                            "className": "Rect"
-                        },
-                        {
-                            "attrs": {
-                                "fill": "rgba(0,0,255,0.5)",
-                                "visible": false,
-                                "x": 234,
-                                "y": 200,
-                                "width": 148,
-                                "height": 192
-                            },
-                            "className": "Rect"
-                        },
-                        {
-                            "attrs": {
-                                "fill": "rgba(0,0,255,0.5)",
-                                "visible": false,
-                                "x": 157,
-                                "y": 142,
-                                "width": 119,
-                                "height": 406
-                            },
-                            "className": "Rect"
-                        },
-                        {
-                            "attrs": {
-                                "x": 57,
-                                "y": 280,
-                                "name": "hotspot-group",
-                                "id": "hotspot-group-z5aoov5v8"
-                            },
-                            "className": "Group",
-                            "children": [
-                                {
-                                    "attrs": {
-                                        "radius": 10,
-                                        "fill": "black",
-                                        "stroke": "black",
-                                        "strokeWidth": 1,
-                                        "name": "hotspot-obje",
-                                        "id": "hotspot-plsjznhge",
-                                        "panorama": "assets/panorama/panorama.jfif"
-                                    },
-                                    "className": "Circle"
-                                },
-                                {
-                                    "attrs": {
-                                        "x": -1.3084603519884299e-13,
-                                        "y": -1.1290449109071141e-13,
-                                        "radius": 200,
-                                        "fill": "rgba(0, 0, 255, 0.1)",
-                                        "stroke": "blue",
-                                        "strokeWidth": 1,
-                                        "name": "hotspot-vision",
-                                        "listening": false,
-                                        "visible": false,
-                                        "scaleX": 1.6655385970582999,
-                                        "scaleY": 1.6655385970583005
-                                    },
-                                    "className": "Circle"
-                                }
-                            ]
-                        },
-                        {
-                            "attrs": {
-                                "x": 356,
-                                "y": 286,
-                                "name": "hotspot-group",
-                                "id": "hotspot-group-d8zc90x4z"
-                            },
-                            "className": "Group",
-                            "children": [
-                                {
-                                    "attrs": {
-                                        "radius": 10,
-                                        "fill": "black",
-                                        "stroke": "black",
-                                        "strokeWidth": 1,
-                                        "name": "hotspot-obje",
-                                        "id": "hotspot-mvtagwbwt",
-                                        "panorama": "assets/panorama/panorama.jfif"
-                                    },
-                                    "className": "Circle"
-                                },
-                                {
-                                    "attrs": {
-                                        "x": -3.6030175760105694e-14,
-                                        "y": 4.350755317557871e-13,
-                                        "radius": 200,
-                                        "fill": "rgba(0, 0, 255, 0.1)",
-                                        "stroke": "blue",
-                                        "strokeWidth": 1,
-                                        "name": "hotspot-vision",
-                                        "listening": false,
-                                        "scaleX": 1.7347809992234442,
-                                        "scaleY": 1.7347809992234438,
-                                        "visible": false
-                                    },
-                                    "className": "Circle"
-                                }
-                            ]
-                        },
-                        {
-                            "attrs": {
-                                "x": 315,
-                                "y": 86,
-                                "width": 20,
-                                "height": 20,
-                                "fill": "lightblue",
-                                "stroke": "black",
-                                "strokeWidth": 1,
-                                "name": "object-obje",
-                                "id": "object-kq2yhrkgp"
-                            },
-                            "className": "Rect"
-                        },
-                        {
-                            "attrs": {
-                                "x": 471,
-                                "y": 80,
-                                "width": 20,
-                                "height": 20,
-                                "fill": "lightblue",
-                                "stroke": "black",
-                                "strokeWidth": 1,
-                                "name": "object-obje",
-                                "id": "object-abokoviq8"
-                            },
-                            "className": "Rect"
-                        },
-                        {
-                            "attrs": {
-                                "x": 324,
-                                "y": 504,
-                                "width": 20,
-                                "height": 20,
-                                "fill": "lightblue",
-                                "stroke": "black",
-                                "strokeWidth": 1,
-                                "name": "object-obje",
-                                "id": "object-h06dhzhlx"
-                            },
-                            "className": "Rect"
-                        },
-                        {
-                            "attrs": {
-                                "x": 527,
-                                "y": 521,
-                                "width": 20,
-                                "height": 20,
-                                "fill": "lightblue",
-                                "stroke": "black",
-                                "strokeWidth": 1,
-                                "name": "object-obje",
-                                "id": "object-o53fpa98j"
-                            },
-                            "className": "Rect"
-                        },
-                        {
-                            "attrs": {
-                                "fill": "rgba(0,0,255,0.5)",
-                                "visible": false,
-                                "x": 234,
-                                "y": 200,
-                                "width": 148,
-                                "height": 192
-                            },
-                            "className": "Rect"
-                        },
-                        {
-                            "attrs": {
-                                "fill": "rgba(0,0,255,0.5)",
-                                "visible": false,
-                                "x": 157,
-                                "y": 142,
-                                "width": 119,
-                                "height": 406
+                                "x": 226,
+                                "y": 550
                             },
                             "className": "Rect"
                         },
                         {
                             "attrs": {
                                 "points": [
-                                    725,
-                                    315,
-                                    723.56,
-                                    265.25,
-                                    719.29,
-                                    217.42,
-                                    712.36,
-                                    173.33,
-                                    703.03,
-                                    134.69,
-                                    691.67,
-                                    102.98,
-                                    678.7,
-                                    79.41,
-                                    664.63,
-                                    64.9,
-                                    660,
-                                    63.34928229665072,
-                                    660,
-                                    60,
-                                    280,
-                                    60,
-                                    280,
-                                    240,
-                                    10,
-                                    240,
-                                    10,
+                                    750,
+                                    560,
+                                    750,
+                                    290,
+                                    460,
+                                    290,
+                                    460,
                                     320,
-                                    280,
+                                    380,
                                     320,
-                                    280,
-                                    570,
-                                    660,
-                                    570,
-                                    660,
-                                    566.6507177033493,
-                                    664.63,
-                                    565.1,
-                                    678.7,
-                                    550.59,
-                                    691.67,
-                                    527.02,
-                                    703.03,
-                                    495.31,
-                                    712.36,
-                                    456.67,
-                                    719.29,
-                                    412.58,
-                                    723.56,
-                                    364.75
+                                    380,
+                                    370,
+                                    460,
+                                    370,
+                                    460,
+                                    560
                                 ],
                                 "fill": "#87CEFA",
                                 "stroke": "black",
@@ -489,144 +103,11 @@
                                 "name": "kilitli-obje"
                             },
                             "className": "Line"
-                        },
-                        {
-                            "attrs": {
-                                "x": 57,
-                                "y": 280,
-                                "name": "hotspot-group",
-                                "id": "hotspot-group-z5aoov5v8"
-                            },
-                            "className": "Group",
-                            "children": [
-                                {
-                                    "attrs": {
-                                        "radius": 10,
-                                        "fill": "black",
-                                        "stroke": "black",
-                                        "strokeWidth": 1,
-                                        "name": "hotspot-obje",
-                                        "id": "hotspot-plsjznhge",
-                                        "panorama": "assets/panorama/panorama.jfif"
-                                    },
-                                    "className": "Circle"
-                                },
-                                {
-                                    "attrs": {
-                                        "x": -1.3084603519884299e-13,
-                                        "y": -1.1290449109071141e-13,
-                                        "radius": 200,
-                                        "fill": "rgba(0, 0, 255, 0.1)",
-                                        "stroke": "blue",
-                                        "strokeWidth": 1,
-                                        "name": "hotspot-vision",
-                                        "listening": false,
-                                        "visible": false,
-                                        "scaleX": 1.6655385970582999,
-                                        "scaleY": 1.6655385970583005
-                                    },
-                                    "className": "Circle"
-                                }
-                            ]
-                        },
-                        {
-                            "attrs": {
-                                "x": 356,
-                                "y": 286,
-                                "name": "hotspot-group",
-                                "id": "hotspot-group-d8zc90x4z"
-                            },
-                            "className": "Group",
-                            "children": [
-                                {
-                                    "attrs": {
-                                        "radius": 10,
-                                        "fill": "black",
-                                        "stroke": "black",
-                                        "strokeWidth": 1,
-                                        "name": "hotspot-obje",
-                                        "id": "hotspot-mvtagwbwt",
-                                        "panorama": "assets/panorama/panorama.jfif"
-                                    },
-                                    "className": "Circle"
-                                },
-                                {
-                                    "attrs": {
-                                        "x": -3.6030175760105694e-14,
-                                        "y": 4.350755317557871e-13,
-                                        "radius": 200,
-                                        "fill": "rgba(0, 0, 255, 0.1)",
-                                        "stroke": "blue",
-                                        "strokeWidth": 1,
-                                        "name": "hotspot-vision",
-                                        "listening": false,
-                                        "scaleX": 1.7347809992234442,
-                                        "scaleY": 1.7347809992234438,
-                                        "visible": false
-                                    },
-                                    "className": "Circle"
-                                }
-                            ]
-                        },
-                        {
-                            "attrs": {
-                                "x": 315,
-                                "y": 86,
-                                "width": 20,
-                                "height": 20,
-                                "fill": "lightblue",
-                                "stroke": "black",
-                                "strokeWidth": 1,
-                                "name": "object-obje",
-                                "id": "object-kq2yhrkgp"
-                            },
-                            "className": "Rect"
-                        },
-                        {
-                            "attrs": {
-                                "x": 471,
-                                "y": 80,
-                                "width": 20,
-                                "height": 20,
-                                "fill": "lightblue",
-                                "stroke": "black",
-                                "strokeWidth": 1,
-                                "name": "object-obje",
-                                "id": "object-abokoviq8"
-                            },
-                            "className": "Rect"
-                        },
-                        {
-                            "attrs": {
-                                "x": 324,
-                                "y": 504,
-                                "width": 20,
-                                "height": 20,
-                                "fill": "lightblue",
-                                "stroke": "black",
-                                "strokeWidth": 1,
-                                "name": "object-obje",
-                                "id": "object-h06dhzhlx"
-                            },
-                            "className": "Rect"
-                        },
-                        {
-                            "attrs": {
-                                "x": 527,
-                                "y": 521,
-                                "width": 20,
-                                "height": 20,
-                                "fill": "lightblue",
-                                "stroke": "black",
-                                "strokeWidth": 1,
-                                "name": "object-obje",
-                                "id": "object-o53fpa98j"
-                            },
-                            "className": "Rect"
                         }
                     ]
                 }
             ]
-        }
+        },
+        "preview_image": "/previews/tour_1787918086788.png"
     }
 ]
