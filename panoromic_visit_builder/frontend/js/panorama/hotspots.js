@@ -3,7 +3,7 @@ import { MarkersPlugin } from '@photo-sphere-viewer/markers-plugin';
 import { stage, layer, transformer, hotspottransformer, sidebar2 } from '/panoromic_visit_builder/frontend/js/script.js';
 import { switchToPanoramaView } from '/panoromic_visit_builder/frontend/js/buttons.js';
 
-
+const VISION_RADIUS = 200; // pixels, adjust as needed
 
 
 export function addMarker(yaw, pitch, targetNode = null) {
@@ -13,21 +13,39 @@ export function addMarker(yaw, pitch, targetNode = null) {
         return;
     }
     const markersPlugin = viewer.getPlugin(MarkersPlugin);
-    markersPlugin.addMarker({
-        id: targetNode ? 'marker-' + targetNode._id : 'marker-' + Math.random(),
-        position: { yaw, pitch },
-        image: 'assets/models/marker.png',
-        size: { width: 32, height: 32 },
-        anchor: 'bottom center',
-        tooltip: targetNode ? (targetNode.getAttr('panorama') || 'Panoramaya Geç') : 'Generated pin',
-        data: {
-            generated: true,
-            targetNodeId: targetNode ? targetNode._id : null,
-            panoramaPath: targetNode ? targetNode.getAttr('panorama') : null,
-            targetNodeRef: targetNode
-        }
-    });
+    if (targetNode.hasName('panorama-hotspot-obje')) {
+        markersPlugin.addMarker({
+            id: targetNode ? 'marker-' + targetNode._id : 'marker-' + Math.random(),
+            position: { yaw, pitch },
+            image: 'assets/models/marker.png',
+            size: { width: 32, height: 32 },
+            anchor: 'bottom center',
+            tooltip: targetNode ? (targetNode.getAttr('panorama') || 'Panoramaya Geç') : 'Generated pin',
+            data: {
+                generated: true,
+                targetNodeId: targetNode ? targetNode._id : null,
+                panoramaPath: targetNode ? targetNode.getAttr('panorama') : null,
+                targetNodeRef: targetNode
+            }
+        });
+    }
+    else {
+        markersPlugin.addMarker({
+            id: targetNode ? 'marker-' + targetNode._id : 'marker-' + Math.random(),
+            position: { yaw, pitch },
+            image: 'assets/models/placeholder.jpg',
+            size: { width: 32, height: 32 },
+            anchor: 'bottom center',
+            data: {
+                generated: true,
+                targetNodeId: targetNode ? targetNode._id : null,
+                targetNodeRef: targetNode
+            }
+        });
 
+
+
+    }
     markersPlugin.addEventListener('select-marker', ({ marker }) => {
         // Marker'ın verisini kontrol et
         if (marker.data && marker.data.targetNodeRef) {
@@ -39,17 +57,11 @@ export function addMarker(yaw, pitch, targetNode = null) {
     });
 }
 
-
-function findMarkerLocations(centerNode) {
-    // centerNode is the hotspot circle (or its group) the user is currently viewing from
-    console.log('centerNode:', centerNode, 'className:', centerNode?.className, 'name:', centerNode?.name?.());
+export function findRadiusForNode(centerNode) {
     const centerGroup = (typeof centerNode.findOne === 'function')
         ? centerNode
         : (centerNode.getParent() || centerNode);
 
-    const centerPos = centerGroup.getAbsolutePosition();
-
-    // centerGroup üzerinde findOne çağrısını da güvenli yap
     const visionCircle = (typeof centerGroup.findOne === 'function')
         ? centerGroup.findOne('.hotspot-vision')
         : null;
@@ -57,13 +69,25 @@ function findMarkerLocations(centerNode) {
     const visionRadius = visionCircle
         ? visionCircle.radius() * visionCircle.getAbsoluteScale().x
         : VISION_RADIUS;
-    const allHotspots = stage.find('.panorama-hotspot-obje');
+    return visionRadius;
+}
+
+function findMarkerLocations(centerNode) {
+
+    const centerGroup = (typeof centerNode.findOne === 'function')
+        ? centerNode
+        : (centerNode.getParent() || centerNode);
+
+    const centerPos = centerGroup.getAbsolutePosition();
+
+    const visionRadius = findRadiusForNode(centerNode);
+    const allHotspots = stage.find('.panorama-hotspot-obje').concat(stage.find('.object-obje'));
     const nearby = [];
+
     allHotspots.forEach((node) => {
         if (node === centerNode) return;
 
-        const group = node.getParent();
-        const pos = group.getAbsolutePosition();
+        const pos = node.getAbsolutePosition();
 
         const dx = pos.x - centerPos.x;
         const dy = pos.y - centerPos.y;
@@ -77,7 +101,6 @@ function findMarkerLocations(centerNode) {
 
             // optional: push pitch down slightly for closer nodes, flatten for far ones
             const pitch = -0.1 - (1 - distance / visionRadius) * 0.3;
-
             nearby.push({ node, distance, yaw, pitch });
         }
     });

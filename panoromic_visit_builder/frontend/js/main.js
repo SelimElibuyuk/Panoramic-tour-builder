@@ -6,3 +6,7 @@ import './buttons.js';
 import './addgroup.js';
 import './panorama/panorama.js';
 import './panorama/hotspots.js';
+import './panorama/visioncone.js';
+import './api/save.js';
+import './api/load.js';
+import './api/delete.js';

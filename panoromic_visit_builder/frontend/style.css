@@ -138,3 +138,120 @@ button:hover .button_top {
 button:active .button_top {
     transform: translateY(0);
 }
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal-content {
+    background-color: #ffffff;
+    width: 500px;
+    max-height: 80vh;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.close-btn {
+    font-size: 28px;
+    font-weight: bold;
+    color: #888;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.close-btn:hover {
+    color: #ff4757;
+}
+
+.tour-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border: 1px solid #e1e1e1;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    background-color: #f8f9fa;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.tour-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.tour-info h4 {
+    margin: 0 0 5px 0;
+    color: #2f3542;
+}
+
+.tour-info p {
+    margin: 0;
+    font-size: 12px;
+    color: #747d8c;
+}
+
+/* Modal içindeki ufak yükle butonu (Ana buton stilinden farklı olması için) */
+.btn-load-tour {
+    background-color: #1e90ff;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    width: auto;
+    margin-bottom: 0;
+}
+
+.btn-load-tour:hover {
+    background-color: #3742fa;
+}
+
+/* Modal içindeki aksiyon butonlarını yan yana dizmek için kapsayıcı */
+.tour-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* Silme Butonu */
+.btn-delete-tour {
+    background-color: #ff4757;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.btn-delete-tour:hover {
+    background-color: #ff6b81;
+}
