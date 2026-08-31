@@ -4,8 +4,17 @@ const closeBtn = document.getElementById('close-asset-library-modal');
 const fileInput = document.getElementById('asset-file-input');
 const grid = document.getElementById('asset-library-grid');
 
+const BACKEND_URL = 'http://127.0.0.1:8000';
+
 let currentMode = null; // 'panorama' or 'model'
 let onSelectCallback = null;
+
+const MODEL_ICON_SVG = `
+<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#747d8c" stroke-width="1.5">
+    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+    <path d="M2 17l10 5 10-5"/>
+    <path d="M2 12l10 5 10-5"/>
+</svg>`;
 
 closeBtn.addEventListener('click', () => modal.classList.remove('active'));
 modal.addEventListener('click', (e) => {
@@ -13,9 +22,9 @@ modal.addEventListener('click', (e) => {
 });
 
 /**
- * Opens the library modal.
+ * Opens the asset library modal.
  * @param {'panorama' | 'model'} mode
- * @param {(url: string, filename: string) => void} onSelect - called when user picks an asset
+ * @param {(url: string, filename: string) => void} onSelect
  */
 export function openAssetLibrary(mode, onSelect) {
     currentMode = mode;
@@ -29,8 +38,8 @@ async function loadAssetList() {
     grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;">Yükleniyor...</p>';
 
     const endpoint = currentMode === 'panorama'
-        ? 'http://127.0.0.1:8000/api/list-panoramas'
-        : 'http://127.0.0.1:8000/api/list-models';
+        ? `${BACKEND_URL}/api/list-panoramas`
+        : `${BACKEND_URL}/api/list-models`;
 
     try {
         const response = await fetch(endpoint);
@@ -45,19 +54,20 @@ async function loadAssetList() {
 
         assets.forEach(asset => {
             const item = document.createElement('div');
-            item.className = currentMode === 'model' ? 'asset-item model-item' : 'asset-item';
+            item.className = 'asset-item';
 
-            const thumbSrc = currentMode === 'panorama'
-                ? `http://127.0.0.1:8000${asset.url}`
-                : 'assets/icons/3d-model-icon.png'; // placeholder icon for .glb files — add one, or swap for any icon you like
+            const thumbHtml = currentMode === 'panorama'
+                ? `<img src="${BACKEND_URL}${asset.url}" alt="${asset.filename}" />`
+                : `<div class="model-icon">${MODEL_ICON_SVG}</div>`;
 
             item.innerHTML = `
-                <img src="${thumbSrc}" alt="${asset.filename}" />
+                ${thumbHtml}
                 <div class="asset-name">${asset.filename}</div>
             `;
 
-            item.addEventListener('click', () => {
-                const fullUrl = `http://127.0.0.1:8000${asset.url}`;
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const fullUrl = `${BACKEND_URL}${asset.url}`;
                 if (onSelectCallback) onSelectCallback(fullUrl, asset.filename);
                 modal.classList.remove('active');
             });
@@ -71,13 +81,14 @@ async function loadAssetList() {
     }
 }
 
-fileInput.addEventListener('change', async () => {
+fileInput.addEventListener('change', async (e) => {
+    e.preventDefault();
     const file = fileInput.files[0];
     if (!file) return;
 
     const endpoint = currentMode === 'panorama'
-        ? 'http://127.0.0.1:8000/api/upload-panorama'
-        : 'http://127.0.0.1:8000/api/upload-model';
+        ? `${BACKEND_URL}/api/upload-panorama`
+        : `${BACKEND_URL}/api/upload-model`;
 
     const formData = new FormData();
     formData.append('file', file);
@@ -89,11 +100,14 @@ fileInput.addEventListener('change', async () => {
             method: 'POST',
             body: formData
         });
+
+        if (!response.ok) throw new Error(`Upload failed with status ${response.status}`);
+
         const result = await response.json();
         console.log(result.mesaj);
 
-        fileInput.value = ''; // reset so selecting the same file again still fires 'change'
-        loadAssetList(); // refresh grid to show the newly uploaded file
+        fileInput.value = ''; // reset so re-selecting the same file still fires 'change'
+        loadAssetList();
     } catch (error) {
         console.error('Yükleme hatası:', error);
         alert('Dosya yüklenemedi!');

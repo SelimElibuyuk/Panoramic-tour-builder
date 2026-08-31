@@ -309,7 +309,6 @@ button:active .button_top {
     cursor: pointer;
 }
 
-
 .asset-upload-row {
     margin-bottom: 15px;
 }
@@ -353,23 +352,21 @@ button:active .button_top {
     border-color: #1e90ff;
 }
 
-.asset-item img {
+.asset-item img,
+.asset-item .model-icon {
     width: 100%;
     height: 80px;
     object-fit: cover;
     border-radius: 4px;
     margin-bottom: 6px;
     background-color: #eef1f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .asset-item .asset-name {
     font-size: 11px;
     color: #747d8c;
     word-break: break-all;
-}
-
-.asset-item.model-item img {
-    /* no real thumbnail for .glb files, show a placeholder icon look */
-    object-fit: contain;
-    padding: 15px;
 }

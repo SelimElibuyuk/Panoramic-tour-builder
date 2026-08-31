@@ -3,13 +3,15 @@ import { initViewer, showPanorama, resizeViewer, getViewer, onViewerReady } from
 import { getGroup } from './addgroup.js';
 import { addMarkersForNode } from './panorama/hotspots.js';
 import { removeVisionCone } from '/panoromic_visit_builder/frontend/js/panorama/visioncone.js';
+import { openAssetLibrary } from '/panoromic_visit_builder/frontend/js/panorama/assetlibrary.js';
 
 
 const addNodebutton = document.getElementById('Node-tool');
 const changecolorbutton = document.getElementById('Change-color-tool');
 const finishbutton = document.getElementById('Finish');
 const switchpanoramabutton = document.getElementById('Switch-panorama-tool');
-const setpanoramabutton = document.getElementById('Set-panorama-tool');
+const setPanoramaButton = document.getElementById('Set-panorama-tool');
+const setObjectButton = document.getElementById('Set-object-tool');
 const addObjectButton = document.getElementById('Object-tool');
 const removeObjectButton = document.querySelectorAll('.remove-item');
 
@@ -97,13 +99,27 @@ finishbutton?.addEventListener('click', function () {
 
 });
 
-setpanoramabutton?.addEventListener('click', function () {
+setPanoramaButton?.addEventListener('click', function (e) {
+    e.preventDefault();
     const object = hotspottransformer.nodes()[0];
     if (!object) return;
 
-    object.setAttr('panorama', panoramicpath);
+    openAssetLibrary('panorama', (url) => {
+
+        object.setAttr('panorama', url);
+        console.log(`Hotspot ${object._id} panoraması ayarlandı:`, url);
+    });
 });
 
+setObjectButton?.addEventListener('click', function () {
+    const object = objecttransformer.nodes()[0];
+    if (!object) return;
+
+    openAssetLibrary('model', (url) => {
+        selectedNode.setAttr('modelUrl', url);
+        console.log(`Obje ${selectedNode._id} modeli ayarlandı:`, url);
+    });
+});
 
 addNodebutton?.addEventListener("click", function () {
     stage.on("mousedown touchstart", function handler(e) {
@@ -189,13 +205,13 @@ export function switchToPanoramaView([selectedNode]) {
     }
 
     changeColor(selectedNode);
-    if(previouslySelectedNode){
+    if (previouslySelectedNode) {
         removeVisionCone(previouslySelectedNode);
     }
 
     previouslySelectedNode = selectedNode;
     setSelectedNode(selectedNode);
-    
+
     panoramaKutusu.style.visibility = 'visible';
     konvaKutusu.classList.add('mini-map-modu');
     sidebar2.style.visibility = 'hidden';

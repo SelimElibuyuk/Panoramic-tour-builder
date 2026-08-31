@@ -33,41 +33,41 @@
     <div id="side-bar">
         <h2>Tools</h2>
         <li>
-            <button id="rectangle-tool">
+            <button id="rectangle-tool" , type="button">
                 <span class="button_top"> Rectangle </span>
             </button>
         </li>
         <li>
-            <button id="Circle-tool">
+            <button id="Circle-tool" , type="button">
                 <span class="button_top"> Circle </span>
             </button>
         </li>
         <li>
-            <button id="Finish">
+            <button id="Finish" , type="button">
                 <span class="button_top"> Finish Room </span>
             </button>
         </li>
         <li>
-            <button id="Node-tool">
+            <button id="Node-tool" , type="button">
                 <span class="button_top"> Add Node </span>
             </button>
         </li>
         <li>
-            <button id="Object-tool">
+            <button id="Object-tool" , type="button">
                 <span class="button_top"> Add Object </span>
             </button>
         </li>
         <li>
-            <button id="Switch-panorama-tool">
+            <button id="Switch-panorama-tool" , type="button">
                 <span class="button_top"> Switch Panorama </span>
             </button>
         </li>
         <li>
-            <button id="Save-tool">
+            <button id="Save-tool" , type="button">
                 <span class="button_top"> Save </span>
             </button>
         </li>
-        <li> <button id="btn-load-tours">
+        <li> <button id="btn-load-tours" , type="button">
                 <span class="button_top">Kayıtlı Turlarım</span>
             </button>
         </li>
@@ -88,17 +88,17 @@
         <h2>Properties</h2>
         <div id="properties">
             <li>
-                <button id="Change-color-tool">
+                <button id="Change-color-tool" type="button">
                     <span class="button_top"> Change Color </span>
                 </button>
             </li>
             <li>
-                <button id="Set-panorama-tool">
+                <button id="Set-panorama-tool" type="button">
                     <span class="button_top"> Set Panorama </span>
                 </button>
             </li>
             <li>
-                <button id="Remove-object-tool" , class="remove-item">
+                <button id="Remove-object-tool" class="remove-item" , type="button">
                     <span class="button_top"> Remove Object </span>
                 </button>
             </li>
@@ -108,17 +108,17 @@
         <h2>Properties</h2>
         <div id="properties">
             <li>
-                <button id="Change-color-tool">
+                <button id="Change-color-tool" , type="button">
                     <span class="button_top"> Change Color </span>
                 </button>
             </li>
             <li>
-                <button id="Set-object-tool">
+                <button id="Set-object-tool" , type="button">
                     <span class="button_top"> Set Object </span>
                 </button>
             </li>
             <li>
-                <button id="Remove-object-tool" , class="remove-item">
+                <button id="Remove-object-tool" , class="remove-item" , type="button">
                     <span class="button_top"> Remove Object </span>
                 </button>
             </li>
@@ -149,8 +149,8 @@
                 <p id="preview-tour-date" class="preview-date"></p>
             </div>
             <div class="preview-actions">
-                <button id="preview-btn-load" class="btn-load-tour">Yükle</button>
-                <button id="preview-btn-delete" class="btn-delete-tour">Sil</button>
+                <button id="preview-btn-load" class="btn-load-tour" , type="button">Yükle</button>
+                <button id="preview-btn-delete" class="btn-delete-tour" , type="button">Sil</button>
             </div>
         </div>
     </div>
@@ -169,9 +169,7 @@
                 <input type="file" id="asset-file-input" style="display:none;" />
             </div>
 
-            <div id="asset-library-grid">
-                <!-- items injected via JS -->
-            </div>
+            <div id="asset-library-grid"></div>
         </div>
     </div>
     <script type="module" src="js/main.js"></script>

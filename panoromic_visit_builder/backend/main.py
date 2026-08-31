@@ -9,6 +9,7 @@ import shutil
 
 app = FastAPI()
 
+
 origins = [
     "http://127.0.0.1:5500",
 ]
@@ -20,6 +21,14 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.middleware("http")
+async def add_cors_header_to_static_files(request: Request, call_next):
+    response = await call_next(request)
+    if request.url.path.startswith(("/panorama-assets", "/model-assets", "/previews")):
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Methods"] = "GET, OPTIONS"
+    return response
 
 SAVE_DIR = "../frontend/assets/tourdata"
 PREVIEW_DIR = os.path.join(SAVE_DIR, "previews")
