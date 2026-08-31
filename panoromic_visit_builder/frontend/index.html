@@ -18,6 +18,8 @@
     {
       "imports": {
         "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/",
+
         "@photo-sphere-viewer/core": "https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core@5/index.module.js",
         "@photo-sphere-viewer/markers-plugin": "https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/markers-plugin@5/index.module.js"
       }
@@ -149,6 +151,26 @@
             <div class="preview-actions">
                 <button id="preview-btn-load" class="btn-load-tour">Yükle</button>
                 <button id="preview-btn-delete" class="btn-delete-tour">Sil</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="asset-library-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="asset-library-title">Kütüphane</h2>
+                <span id="close-asset-library-modal" class="close-btn">&times;</span>
+            </div>
+
+            <div class="asset-upload-row">
+                <label for="asset-file-input" class="btn-upload-asset">
+                    + Yeni Dosya Yükle
+                </label>
+                <input type="file" id="asset-file-input" style="display:none;" />
+            </div>
+
+            <div id="asset-library-grid">
+                <!-- items injected via JS -->
             </div>
         </div>
     </div>

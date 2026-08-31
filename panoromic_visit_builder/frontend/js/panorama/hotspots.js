@@ -1,9 +1,11 @@
-import { getViewer } from '/panoromic_visit_builder/frontend/js/panorama/panorama.js';
+import { getViewer, getModelPlugin } from '/panoromic_visit_builder/frontend/js/panorama/panorama.js';
+import { ModelHotspotsPlugin } from '/panoromic_visit_builder/frontend/js/panorama/objects.js';
 import { MarkersPlugin } from '@photo-sphere-viewer/markers-plugin';
 import { stage, layer, transformer, hotspottransformer, sidebar2 } from '/panoromic_visit_builder/frontend/js/script.js';
 import { switchToPanoramaView } from '/panoromic_visit_builder/frontend/js/buttons.js';
 
 const VISION_RADIUS = 200; // pixels, adjust as needed
+const Offset = 0.1; // radians, adjust to rotate the marker placement around the center node
 
 
 export function addMarker(yaw, pitch, targetNode = null) {
@@ -30,17 +32,34 @@ export function addMarker(yaw, pitch, targetNode = null) {
         });
     }
     else {
-        markersPlugin.addMarker({
-            id: targetNode ? 'marker-' + targetNode._id : 'marker-' + Math.random(),
-            position: { yaw, pitch },
-            image: 'assets/models/placeholder.jpg',
-            size: { width: 32, height: 32 },
-            anchor: 'bottom center',
+        // object-obje nodes become real 3D models instead of a flat placeholder image
+        const modelPlugin = getModelPlugin();
+        if (modelPlugin) {
+            modelPlugin.clearAllModels(); 
+        }
+        if (!modelPlugin) {
+            console.error('addMarker: model plugin not ready yet');
+            return;
+        }
+
+        const modelUrl = targetNode.getAttr('modelUrl') || 'assets/3dmodels/box.glb'; // <-- this line must exist
+        console.log('Placing model at yaw:', yaw, 'pitch:', pitch);
+        modelPlugin.addModel({
+            id: 'model-' + targetNode._id,
+            url: modelUrl,
+            yaw,
+            pitch: -0.3,
+            distance: 4,
+            scale: targetNode.getAttr('modelScale') || 1,
             data: {
-                generated: true,
-                targetNodeId: targetNode ? targetNode._id : null,
-                targetNodeRef: targetNode
+                targetNodeId: targetNode._id,
+                targetNodeRef: targetNode,
+                name: targetNode.getAttr('objectName') || 'Object'
             }
+        });
+        modelPlugin.addEventListener('select-model', (event) => {
+            const { hotspotId, data } = event.detail;
+            console.log('Clicked model:', hotspotId, data, pitch, yaw);
         });
     }
 }
@@ -85,7 +104,7 @@ function findMarkerLocations(centerNode) {
             // bearing from center node to this node, in radians
             // atan2(dy, dx): 0 = east, PI/2 = south (screen coords)
             // shift so 0 = "up/north" to feel more natural for a panorama yaw, adjust as needed
-            const yaw = Math.atan2(dx, -dy); // 0 = up, clockwise positive
+            const yaw = Math.atan2(dx, -dy) + Offset; // 0 = up, clockwise positive
 
             // optional: push pitch down slightly for closer nodes, flatten for far ones
             const pitch = -0.1 - (1 - distance / visionRadius) * 0.3;
@@ -111,6 +130,6 @@ export function addMarkersForNode(centerNode) {
     });
 
     console.log(`Added ${targets.length} marker(s) for node`, centerNode);
-}
+};
 
 

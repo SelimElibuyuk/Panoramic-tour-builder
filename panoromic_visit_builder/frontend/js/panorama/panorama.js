@@ -3,9 +3,11 @@ import { Viewer } from '@photo-sphere-viewer/core';
 import { MarkersPlugin } from '@photo-sphere-viewer/markers-plugin';
 import { getSelectedNode, switchToPanoramaView } from '/panoromic_visit_builder/frontend/js/buttons.js';
 import { addMarkersForNode } from '/panoromic_visit_builder/frontend/js/panorama/hotspots.js';
+import { ModelHotspotsPlugin } from '/panoromic_visit_builder/frontend/js/panorama/objects.js';
 
 let viewer = null;
 let markersPlugin = null;
+let modelPlugin = null;
 let pendingReadyCallbacks = [];
 
 function initViewer(defaultPanorama) {
@@ -17,7 +19,10 @@ function initViewer(defaultPanorama) {
     viewer = new Viewer({
         container,
         panorama: defaultPanorama,
-        plugins: [[MarkersPlugin, { markers: [] }]],
+        plugins: [
+            [MarkersPlugin, { markers: [] }],
+            ModelHotspotsPlugin
+        ],
         navbar: [],
         description: 'Panoramic view of the room. Use mouse or touch to look around.',
     });
@@ -25,7 +30,7 @@ function initViewer(defaultPanorama) {
         yaw: 1.5,
         pitch: 0,
     });
-
+    modelPlugin = viewer.getPlugin(ModelHotspotsPlugin);
     markersPlugin = viewer.getPlugin(MarkersPlugin);
 
     viewer.addEventListener('ready', () => console.log('viewer ready'));
@@ -75,9 +80,8 @@ function onViewerReady(callback) {
 
     const markersPlugin = viewer.getPlugin('markers');
 
-    // SİHİRLİ KİLİT: Dinleyici daha önce eklendiyse bu bloğu atla!
+    // Dinleyici daha önce eklendiyse bu bloğu atla
     if (!markerListenerAdded) {
-        console.log('Marker tıklama dinleyicisi SADECE 1 KEZ kuruluyor.');
 
         markersPlugin.addEventListener('select-marker', ({ marker }) => {
             if (marker.data && marker.data.targetNodeRef) {
@@ -93,7 +97,6 @@ function onViewerReady(callback) {
         markerListenerAdded = true;
     }
 
-    // Odaya her geçişte yapılması gereken diğer standart işlemler (örneğin markerları basma)
     const selectedNode = getSelectedNode();
     if (selectedNode) {
         addMarkersForNode(selectedNode);
@@ -101,4 +104,8 @@ function onViewerReady(callback) {
 
 }
 
-export { initViewer, showPanorama, resizeViewer, getViewer, viewer, markersPlugin, onViewerReady };
+function getModelPlugin() {
+    return modelPlugin;
+}
+
+export { initViewer, showPanorama, resizeViewer, getViewer, viewer, markersPlugin, modelPlugin, onViewerReady, getModelPlugin };

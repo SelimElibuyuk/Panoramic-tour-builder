@@ -13,7 +13,7 @@ function updateVisionCone(node, yaw, radius) {
         cone = new Konva.Wedge({
             name: 'vision-cone',
             radius: radius,       // how far the cone reaches on the minimap
-            angle: 70,        // cone width in degrees — could scale with FOV/zoom
+            angle: 80,        // cone width in degrees — could scale with FOV/zoom
             fill: 'rgba(255, 255, 0, 0.3)',
             stroke: 'orange',
             strokeWidth: 1,
@@ -43,9 +43,9 @@ let visionConeListenersAdded = false;
 
 onViewerReady(() => {
     const viewer = getViewer();
-    
+
     if (!visionConeListenersAdded) {
-        
+
         viewer.addEventListener('position-updated', ({ position }) => {
             const selectedNode = getSelectedNode();
             if (selectedNode) {
@@ -53,7 +53,7 @@ onViewerReady(() => {
                 updateVisionCone(selectedNode, position.yaw, radius);
             }
         });
-        
+
         viewer.addEventListener('ready', () => {
             const selectedNode = getSelectedNode();
             if (selectedNode) {
@@ -61,6 +61,6 @@ onViewerReady(() => {
                 updateVisionCone(selectedNode, 0, radius);
             }
         });
-        visionConeListenersAdded = true; 
+        visionConeListenersAdded = true;
     }
 });

@@ -1,16 +1,16 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 import json
 import os
 import base64
 import uuid
+import shutil
 
 app = FastAPI()
 
 origins = [
     "http://127.0.0.1:5500",
-    "localhost:8000",
 ]
 
 app.add_middleware(
@@ -23,12 +23,81 @@ app.add_middleware(
 
 SAVE_DIR = "../frontend/assets/tourdata"
 PREVIEW_DIR = os.path.join(SAVE_DIR, "previews")
+PANORAMA_DIR = "../frontend/assets/panorama"
+MODEL_DIR = "../frontend/assets/3dmodels"
+
 os.makedirs(SAVE_DIR, exist_ok=True)
 os.makedirs(PREVIEW_DIR, exist_ok=True)
+os.makedirs(PANORAMA_DIR, exist_ok=True)
+os.makedirs(MODEL_DIR, exist_ok=True)
 
-# serve the previews folder as static files so the frontend can load them directly
 app.mount("/previews", StaticFiles(directory=PREVIEW_DIR), name="previews")
+app.mount("/panorama-assets", StaticFiles(directory=PANORAMA_DIR), name="panorama-assets")
+app.mount("/model-assets", StaticFiles(directory=MODEL_DIR), name="model-assets")
 
+
+def safe_filename(original_name: str) -> str:
+    """Prevents collisions and strips unsafe characters, keeps the extension."""
+    ext = os.path.splitext(original_name)[1]
+    return f"{uuid.uuid4().hex}{ext}"
+
+
+@app.post("/api/upload-panorama")
+async def upload_panorama(file: UploadFile = File(...)):
+    filename = safe_filename(file.filename)
+    file_path = os.path.join(PANORAMA_DIR, filename)
+
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+
+    return {
+        "mesaj": "Panorama yüklendi!",
+        "filename": filename,
+        "original_name": file.filename,
+        "url": f"/panorama-assets/{filename}"
+    }
+
+
+@app.get("/api/list-panoramas")
+async def list_panoramas():
+    files = []
+    for f in os.listdir(PANORAMA_DIR):
+        full_path = os.path.join(PANORAMA_DIR, f)
+        if os.path.isfile(full_path) and f.lower().endswith(('.jpg', '.jpeg', '.png', '.webp')):
+            files.append({
+                "filename": f,
+                "url": f"/panorama-assets/{f}"
+            })
+    return files
+
+
+@app.post("/api/upload-model")
+async def upload_model(file: UploadFile = File(...)):
+    filename = safe_filename(file.filename)
+    file_path = os.path.join(MODEL_DIR, filename)
+
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+
+    return {
+        "mesaj": "Model yüklendi!",
+        "filename": filename,
+        "original_name": file.filename,
+        "url": f"/model-assets/{filename}"
+    }
+
+
+@app.get("/api/list-models")
+async def list_models():
+    files = []
+    for f in os.listdir(MODEL_DIR):
+        full_path = os.path.join(MODEL_DIR, f)
+        if os.path.isfile(full_path) and f.lower().endswith(('.glb', '.gltf')):
+            files.append({
+                "filename": f,
+                "url": f"/model-assets/{f}"
+            })
+    return files
 
 def save_preview_image(tour_id: str, base64_data: str) -> str:
     """Decodes a base64 data URL and saves it as a PNG file. Returns the relative URL."""
