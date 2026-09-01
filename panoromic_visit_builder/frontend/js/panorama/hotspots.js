@@ -1,8 +1,7 @@
 import { getViewer, getModelPlugin } from '/panoromic_visit_builder/frontend/js/panorama/panorama.js';
-import { ModelHotspotsPlugin } from '/panoromic_visit_builder/frontend/js/panorama/objects.js';
 import { MarkersPlugin } from '@photo-sphere-viewer/markers-plugin';
-import { stage, layer, transformer, hotspottransformer, sidebar2 } from '/panoromic_visit_builder/frontend/js/script.js';
-import { switchToPanoramaView } from '/panoromic_visit_builder/frontend/js/buttons.js';
+import { stage } from '/panoromic_visit_builder/frontend/js/script.js';
+import { openInfoPanel } from '/panoromic_visit_builder/frontend/js/panorama/informationPanel.js';
 
 const VISION_RADIUS = 200; // pixels, adjust as needed
 const Offset = 0.1; // radians, adjust to rotate the marker placement around the center node
@@ -19,7 +18,7 @@ export function addMarker(yaw, pitch, targetNode = null) {
         markersPlugin.addMarker({
             id: targetNode ? 'marker-' + targetNode._id : 'marker-' + Math.random(),
             position: { yaw, pitch },
-            image: 'assets/models/marker.png',
+            image: 'assets/icons/indir.png',
             size: { width: 32, height: 32 },
             anchor: 'bottom center',
             tooltip: targetNode ? (targetNode.getAttr('panorama') || 'Panoramaya Geç') : 'Generated pin',
@@ -35,7 +34,7 @@ export function addMarker(yaw, pitch, targetNode = null) {
         // object-obje nodes become real 3D models instead of a flat placeholder image
         const modelPlugin = getModelPlugin();
         if (modelPlugin) {
-            modelPlugin.clearAllModels(); 
+            modelPlugin.clearAllModels();
         }
         if (!modelPlugin) {
             console.error('addMarker: model plugin not ready yet');
@@ -59,7 +58,8 @@ export function addMarker(yaw, pitch, targetNode = null) {
         });
         modelPlugin.addEventListener('select-model', (event) => {
             const { hotspotId, data } = event.detail;
-            console.log('Clicked model:', hotspotId, data, pitch, yaw);
+            openInfoPanel(data.targetNodeRef);
+            console.log('Model selected:', data);
         });
     }
 }
@@ -107,7 +107,7 @@ function findMarkerLocations(centerNode) {
             const yaw = Math.atan2(dx, -dy) + Offset; // 0 = up, clockwise positive
 
             // optional: push pitch down slightly for closer nodes, flatten for far ones
-            const pitch = -0.1 - (1 - distance / visionRadius) * 0.3;
+            const pitch = -0.3 - (1 - distance / visionRadius) * 0.3;
             nearby.push({ node, distance, yaw, pitch });
         }
     });

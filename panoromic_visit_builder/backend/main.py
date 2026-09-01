@@ -45,15 +45,10 @@ app.mount("/panorama-assets", StaticFiles(directory=PANORAMA_DIR), name="panoram
 app.mount("/model-assets", StaticFiles(directory=MODEL_DIR), name="model-assets")
 
 
-def safe_filename(original_name: str) -> str:
-    """Prevents collisions and strips unsafe characters, keeps the extension."""
-    ext = os.path.splitext(original_name)[1]
-    return f"{uuid.uuid4().hex}{ext}"
-
 
 @app.post("/api/upload-panorama")
 async def upload_panorama(file: UploadFile = File(...)):
-    filename = safe_filename(file.filename)
+    filename = file.filename
     file_path = os.path.join(PANORAMA_DIR, filename)
 
     with open(file_path, "wb") as buffer:
@@ -82,7 +77,7 @@ async def list_panoramas():
 
 @app.post("/api/upload-model")
 async def upload_model(file: UploadFile = File(...)):
-    filename = safe_filename(file.filename)
+    filename = file.filename
     file_path = os.path.join(MODEL_DIR, filename)
 
     with open(file_path, "wb") as buffer:

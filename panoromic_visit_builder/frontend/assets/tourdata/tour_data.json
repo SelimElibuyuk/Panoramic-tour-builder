@@ -2,7 +2,7 @@
     {
         "id": "tour_1788184974098",
         "name": "deneme",
-        "tarih": "31.08.2026 17:04:48",
+        "tarih": "01.09.2026 08:27:03",
         "konva_data": {
             "attrs": {
                 "width": 1200,
@@ -51,6 +51,28 @@
                                 "rotateEnabled": false
                             },
                             "className": "Transformer"
+                        },
+                        {
+                            "attrs": {
+                                "rotateEnabled": false,
+                                "enabledAnchors": [
+                                    "top-left",
+                                    "top-right",
+                                    "bottom-left",
+                                    "bottom-right"
+                                ],
+                                "centeredScaling": true
+                            },
+                            "className": "Transformer"
+                        },
+                        {
+                            "attrs": {
+                                "fill": "rgba(0,0,255,0.5)",
+                                "visible": false,
+                                "x": 95,
+                                "y": 206
+                            },
+                            "className": "Rect"
                         },
                         {
                             "attrs": {
@@ -109,11 +131,398 @@
                                         "stroke": "blue",
                                         "strokeWidth": 1,
                                         "name": "hotspot-vision",
-                                        "listening": false
+                                        "listening": false,
+                                        "visible": false
                                     },
                                     "className": "Circle"
                                 }
                             ]
+                        },
+                        {
+                            "attrs": {
+                                "x": 509,
+                                "y": 326,
+                                "width": 20,
+                                "height": 20,
+                                "fill": "lightblue",
+                                "stroke": "black",
+                                "strokeWidth": 1,
+                                "name": "object-obje",
+                                "id": "object-n09us0zb3"
+                            },
+                            "className": "Rect"
+                        }
+                    ]
+                }
+            ]
+        },
+        "preview_image": "/previews/tour_1788184974098.png"
+    },
+    {
+        "id": "tour_1788260349507",
+        "name": "1234",
+        "tarih": "01.09.2026 13:59:09",
+        "konva_data": {
+            "attrs": {
+                "width": 1200,
+                "height": 800
+            },
+            "className": "Stage",
+            "children": [
+                {
+                    "attrs": {},
+                    "className": "Layer",
+                    "children": [
+                        {
+                            "attrs": {
+                                "rotationSnaps": [
+                                    0,
+                                    90,
+                                    180,
+                                    270
+                                ],
+                                "keepRatio": false,
+                                "enabledAnchors": [
+                                    "top-left",
+                                    "top-right",
+                                    "bottom-left",
+                                    "bottom-right",
+                                    "top-center",
+                                    "bottom-center",
+                                    "middle-left",
+                                    "middle-right"
+                                ],
+                                "x": 236,
+                                "y": 422
+                            },
+                            "className": "Transformer"
+                        },
+                        {
+                            "attrs": {
+                                "keepRatio": false,
+                                "resizeEnabled": false,
+                                "rotateEnabled": false
+                            },
+                            "className": "Transformer"
+                        },
+                        {
+                            "attrs": {
+                                "keepRatio": false,
+                                "resizeEnabled": false,
+                                "rotateEnabled": false
+                            },
+                            "className": "Transformer"
+                        },
+                        {
+                            "attrs": {
+                                "fill": "rgba(0,0,255,0.5)",
+                                "visible": false,
+                                "x": 971,
+                                "y": 279
+                            },
+                            "className": "Rect"
+                        },
+                        {
+                            "attrs": {
+                                "points": [
+                                    879.04,
+                                    199.75,
+                                    876.19,
+                                    209.13,
+                                    871.57,
+                                    217.78,
+                                    865.36,
+                                    225.36,
+                                    857.78,
+                                    231.57,
+                                    849.13,
+                                    236.19,
+                                    839.75,
+                                    239.04,
+                                    830,
+                                    240,
+                                    820.25,
+                                    239.04,
+                                    820,
+                                    238.96404051172706,
+                                    820,
+                                    460,
+                                    790,
+                                    460,
+                                    790,
+                                    510,
+                                    690,
+                                    510,
+                                    690,
+                                    460,
+                                    335.7253294797688,
+                                    460,
+                                    336.19,
+                                    460.87,
+                                    339.04,
+                                    470.25,
+                                    340,
+                                    480,
+                                    339.04,
+                                    489.75,
+                                    336.19,
+                                    499.13,
+                                    331.57,
+                                    507.78,
+                                    325.36,
+                                    515.36,
+                                    317.78,
+                                    521.57,
+                                    309.13,
+                                    526.19,
+                                    299.75,
+                                    529.04,
+                                    290,
+                                    530,
+                                    280.25,
+                                    529.04,
+                                    270.87,
+                                    526.19,
+                                    262.22,
+                                    521.57,
+                                    254.64,
+                                    515.36,
+                                    248.43,
+                                    507.78,
+                                    243.81,
+                                    499.13,
+                                    240.96,
+                                    489.75,
+                                    240,
+                                    480,
+                                    240.96,
+                                    470.25,
+                                    243.81,
+                                    460.87,
+                                    248.43,
+                                    452.22,
+                                    254.64,
+                                    444.64,
+                                    262.22,
+                                    438.43,
+                                    270,
+                                    434.2746705202312,
+                                    270,
+                                    200,
+                                    781.035959488273,
+                                    200,
+                                    780.96,
+                                    199.75,
+                                    780,
+                                    190,
+                                    780.96,
+                                    180.25,
+                                    783.81,
+                                    170.87,
+                                    788.43,
+                                    162.22,
+                                    794.64,
+                                    154.64,
+                                    802.22,
+                                    148.43,
+                                    810.87,
+                                    143.81,
+                                    820.25,
+                                    140.96,
+                                    830,
+                                    140,
+                                    839.75,
+                                    140.96,
+                                    849.13,
+                                    143.81,
+                                    857.78,
+                                    148.43,
+                                    865.36,
+                                    154.64,
+                                    871.57,
+                                    162.22,
+                                    876.19,
+                                    170.87,
+                                    879.04,
+                                    180.25,
+                                    880,
+                                    190
+                                ],
+                                "fill": "#87CEFA",
+                                "stroke": "black",
+                                "strokeWidth": 1,
+                                "closed": true,
+                                "name": "kilitli-obje"
+                            },
+                            "className": "Line"
+                        },
+                        {
+                            "attrs": {
+                                "x": 305,
+                                "y": 439,
+                                "name": "hotspot-group",
+                                "id": "hotspot-group-r5b7q50n7"
+                            },
+                            "className": "Group",
+                            "children": [
+                                {
+                                    "attrs": {
+                                        "radius": 10,
+                                        "fill": "black",
+                                        "stroke": "black",
+                                        "strokeWidth": 1,
+                                        "name": "hotspot-obje",
+                                        "id": "hotspot-xlrj3rzd5",
+                                        "panorama": "assets/panorama/panorama.jfif"
+                                    },
+                                    "className": "Circle"
+                                },
+                                {
+                                    "attrs": {
+                                        "x": -1.3545485423377196e-13,
+                                        "y": -2.5020584110043066e-13,
+                                        "radius": 200,
+                                        "fill": "rgba(0, 0, 255, 0.1)",
+                                        "stroke": "blue",
+                                        "strokeWidth": 1,
+                                        "name": "hotspot-vision",
+                                        "listening": false,
+                                        "scaleX": 1.245597841649541,
+                                        "scaleY": 1.2455978416495408
+                                    },
+                                    "className": "Circle"
+                                }
+                            ]
+                        },
+                        {
+                            "attrs": {
+                                "x": 456,
+                                "y": 316,
+                                "name": "hotspot-group",
+                                "id": "hotspot-group-oydvd9ve1"
+                            },
+                            "className": "Group",
+                            "children": [
+                                {
+                                    "attrs": {
+                                        "radius": 10,
+                                        "fill": "black",
+                                        "stroke": "black",
+                                        "strokeWidth": 1,
+                                        "name": "hotspot-obje",
+                                        "id": "hotspot-84kxrx9y6",
+                                        "panorama": "assets/panorama/panorama.jfif"
+                                    },
+                                    "className": "Circle"
+                                },
+                                {
+                                    "attrs": {
+                                        "x": -4.726820622694655e-13,
+                                        "y": -2.434506087841645e-13,
+                                        "radius": 200,
+                                        "fill": "rgba(0, 0, 255, 0.1)",
+                                        "stroke": "blue",
+                                        "strokeWidth": 1,
+                                        "name": "hotspot-vision",
+                                        "listening": false,
+                                        "visible": false,
+                                        "scaleX": 1.2900869067002374,
+                                        "scaleY": 1.2900869067002376
+                                    },
+                                    "className": "Circle"
+                                }
+                            ]
+                        },
+                        {
+                            "attrs": {
+                                "x": 667,
+                                "y": 316,
+                                "name": "hotspot-group",
+                                "id": "hotspot-group-srf004jdv"
+                            },
+                            "className": "Group",
+                            "children": [
+                                {
+                                    "attrs": {
+                                        "radius": 200,
+                                        "fill": "rgba(0, 0, 255, 0.1)",
+                                        "stroke": "blue",
+                                        "strokeWidth": 1,
+                                        "name": "hotspot-vision",
+                                        "listening": false,
+                                        "visible": false
+                                    },
+                                    "className": "Circle"
+                                },
+                                {
+                                    "attrs": {
+                                        "radius": 10,
+                                        "fill": "black",
+                                        "stroke": "black",
+                                        "strokeWidth": 1,
+                                        "name": "hotspot-obje",
+                                        "id": "hotspot-fxdcn81zp",
+                                        "panorama": "assets/panorama/panorama.jfif"
+                                    },
+                                    "className": "Circle"
+                                }
+                            ]
+                        },
+                        {
+                            "attrs": {
+                                "x": 342,
+                                "y": 221,
+                                "width": 20,
+                                "height": 20,
+                                "fill": "lightblue",
+                                "stroke": "black",
+                                "strokeWidth": 1,
+                                "name": "object-obje",
+                                "id": "object-3nh0ynibh"
+                            },
+                            "className": "Rect"
+                        },
+                        {
+                            "attrs": {
+                                "x": 471,
+                                "y": 216,
+                                "width": 20,
+                                "height": 20,
+                                "fill": "lightblue",
+                                "stroke": "black",
+                                "strokeWidth": 1,
+                                "name": "object-obje",
+                                "id": "object-ckqrarv41"
+                            },
+                            "className": "Rect"
+                        },
+                        {
+                            "attrs": {
+                                "x": 598,
+                                "y": 215,
+                                "width": 20,
+                                "height": 20,
+                                "fill": "lightblue",
+                                "stroke": "black",
+                                "strokeWidth": 1,
+                                "name": "object-obje",
+                                "id": "object-64ne1qojk"
+                            },
+                            "className": "Rect"
+                        },
+                        {
+                            "attrs": {
+                                "x": 478,
+                                "y": 406,
+                                "width": 20,
+                                "height": 20,
+                                "fill": "lightblue",
+                                "stroke": "black",
+                                "strokeWidth": 1,
+                                "name": "object-obje",
+                                "id": "object-gp5ihmzli"
+                            },
+                            "className": "Rect"
                         },
                         {
                             "attrs": {
@@ -132,12 +541,12 @@
                 }
             ]
         },
-        "preview_image": "/previews/tour_1788184974098.png"
+        "preview_image": "/previews/tour_1788260349507.png"
     },
     {
-        "id": "tour_1788186879519",
-        "name": "Yeni Showroom",
-        "tarih": "31.08.2026 17:34:39",
+        "id": "tour_1788265939180",
+        "name": "parçalar",
+        "tarih": "01.09.2026 15:32:19",
         "konva_data": {
             "attrs": {
                 "width": 1200,
@@ -191,31 +600,44 @@
                             "attrs": {
                                 "fill": "rgba(0,0,255,0.5)",
                                 "visible": false,
-                                "x": 412,
-                                "y": 401,
-                                "width": 131,
-                                "height": 139
+                                "x": 470,
+                                "y": 325,
+                                "width": 3,
+                                "height": 3
                             },
                             "className": "Rect"
                         },
                         {
                             "attrs": {
-                                "x": 233,
-                                "y": 290,
+                                "x": 458,
+                                "y": 322,
                                 "name": "hotspot-group",
-                                "id": "hotspot-group-ppx3dkkng"
+                                "id": "hotspot-group-wu4alv1xv"
                             },
                             "className": "Group",
                             "children": [
                                 {
                                     "attrs": {
+                                        "name": "vision-cone",
+                                        "radius": 200,
+                                        "angle": 80,
+                                        "fill": "rgba(255, 255, 0, 0.3)",
+                                        "stroke": "orange",
+                                        "strokeWidth": 1,
+                                        "listening": false,
+                                        "rotation": 204.2310776551597
+                                    },
+                                    "className": "Wedge"
+                                },
+                                {
+                                    "attrs": {
                                         "radius": 10,
-                                        "fill": "black",
+                                        "fill": "#008000",
                                         "stroke": "black",
                                         "strokeWidth": 1,
-                                        "name": "hotspot-obje",
-                                        "id": "hotspot-dhplb04pm",
-                                        "panorama": "http://127.0.0.1:8000/panorama-assets/88413dbab00b4d3f88871a0cf6cd97b1.jpg"
+                                        "name": "panorama-hotspot-obje",
+                                        "id": "hotspot-i8kpyuic0",
+                                        "panorama": "assets/panorama/panorama.jfif"
                                     },
                                     "className": "Circle"
                                 },
@@ -235,6 +657,36 @@
                         },
                         {
                             "attrs": {
+                                "x": 364,
+                                "y": 245,
+                                "width": 20,
+                                "height": 20,
+                                "fill": "lightblue",
+                                "stroke": "black",
+                                "strokeWidth": 1,
+                                "name": "object-obje",
+                                "id": "object-hqy4z6lzd",
+                                "modelUrl": "http://127.0.0.1:8000/model-assets/cnc_1.glb"
+                            },
+                            "className": "Rect"
+                        },
+                        {
+                            "attrs": {
+                                "x": 481,
+                                "y": 242,
+                                "width": 20,
+                                "height": 20,
+                                "fill": "lightblue",
+                                "stroke": "black",
+                                "strokeWidth": 1,
+                                "name": "object-obje",
+                                "id": "object-4ull52w0w",
+                                "modelUrl": "http://127.0.0.1:8000/model-assets/cnc_2.glb"
+                            },
+                            "className": "Rect"
+                        },
+                        {
+                            "attrs": {
                                 "rotateEnabled": false,
                                 "enabledAnchors": [
                                     "top-left",
@@ -250,6 +702,6 @@
                 }
             ]
         },
-        "preview_image": "/previews/tour_1788186879519.png"
+        "preview_image": "/previews/tour_1788265939180.png"
     }
 ]

@@ -32,9 +32,9 @@ function openPreviewModal(tur) {
     previewName.textContent = tur.name;
     previewDate.textContent = `Son Güncelleme: ${tur.tarih}`;
 
-    // build the full URL to the backend, since preview_image is a relative path
+    // ?t=... ekleyerek tarayıcı önbelleğini (cache) aşıyoruz
     previewImage.src = tur.preview_image
-        ? `http://127.0.0.1:8000${tur.preview_image}`
+        ? `http://127.0.0.1:8000${tur.preview_image}?t=${new Date().getTime()}`
         : '';
 
     previewModal.classList.add('active');

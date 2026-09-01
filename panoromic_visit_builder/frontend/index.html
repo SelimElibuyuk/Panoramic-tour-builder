@@ -172,6 +172,42 @@
             <div id="asset-library-grid"></div>
         </div>
     </div>
+    <!-- Obje Bilgi Paneli -->
+    <div id="object-info-panel" class="info-panel">
+
+        <!-- Üst Kısım (Başlık ve Kapatma Butonu) -->
+        <div class="info-panel-header">
+            <h3 class="info-title">Obje Başlığı</h3>
+            <button id="close-info-panel" class="info-close-btn" type="button">&times;</button>
+        </div>
+
+        <!-- Orta Kısım (İçerik, Görsel ve Detaylar) -->
+        <div class="info-panel-body">
+            <img src="https://via.placeholder.com/400x250" alt="Obje Görseli" class="info-image">
+
+            <p class="info-description">
+                Bu obje hakkında detaylı bilgi alanı. Panoramik tur içerisindeki bir noktaya veya 3D modele
+                tıklandığında bu alan objeye özel verilerle dolacak.
+            </p>
+
+            <!-- Özellikler Tablosu/Listesi -->
+            <div class="info-details">
+                <div class="info-row">
+                    <span class="info-label">Kategori:</span>
+                    <span class="info-value">Dekorasyon</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Materyal:</span>
+                    <span class="info-value">Ahşap / Metal</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Durum:</span>
+                    <span class="info-value" style="color: #2ecc71; font-weight: bold;">Mevcut</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
     <script type="module" src="js/main.js"></script>
 </body>
 

@@ -370,3 +370,106 @@ button:active .button_top {
     color: #747d8c;
     word-break: break-all;
 }
+
+/* Panel Ana Konteyner - Sağ tarafa sabit, varsayılan olarak gizli (ekran dışı) */
+.info-panel {
+    position: fixed;
+    top: 0;
+    right: -400px; /* Paneli gizler */
+    width: 350px;
+    height: 100vh;
+    background-color: #ffffff;
+    box-shadow: -5px 0 25px rgba(0, 0, 0, 0.15);
+    transition: right 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Paneli Görünür Yapan Sınıf (JS ile eklenecek) */
+.info-panel.active {
+    right: 0;
+}
+
+/* Header Alanı */
+.info-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.info-title {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.info-close-btn {
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    line-height: 1;
+    cursor: pointer;
+    color: #95a5a6;
+    transition: color 0.2s ease;
+}
+
+.info-close-btn:hover {
+    color: #e74c3c;
+}
+
+/* Orta İçerik Alanı (Scroll eklendi) */
+.info-panel-body {
+    padding: 20px;
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.info-image {
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    object-fit: cover;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.info-description {
+    font-size: 0.95rem;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+/* Detaylar / Özellikler Kutusu */
+.info-details {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 15px;
+    border: 1px solid #eee;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 0.9rem;
+}
+
+.info-row:last-child {
+    margin-bottom: 0;
+}
+
+.info-label {
+    font-weight: 600;
+    color: #34495e;
+}
+
+.info-value {
+    color: #7f8c8d;
+    text-align: right;
+}
+

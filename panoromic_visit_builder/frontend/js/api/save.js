@@ -1,4 +1,4 @@
-import { stage } from '/panoromic_visit_builder/frontend/js/script.js';
+import { stage, transformer, objecttransformer, visiontransformer, hotspottransformer, } from '/panoromic_visit_builder/frontend/js/script.js';
 
 
 export let aktifTurId = null;
@@ -7,6 +7,11 @@ export let aktifTurAdi = null;
 const saveMapButton = document.getElementById('Save-tool');
 
 saveMapButton.addEventListener('click', function () {
+    stage.find('.hotspot-vision').forEach(v => v.visible(false));
+    transformer.nodes([]); // Deselect all nodes before saving
+    objecttransformer.nodes([]);
+    visiontransformer.nodes([]);
+    hotspottransformer.nodes([]);
     console.log("Save button clicked. Preparing to save the map...");
 });
 
@@ -20,6 +25,7 @@ function captureStagePreview() {
 }
 
 saveMapButton.addEventListener('click', async function () {
+
     // 1. Eğer bu yepyeni bir tursa (henüz ID'si yoksa) kullanıcıdan isim isteyelim
     if (!window.aktifTurId) {
         window.aktifTurAdi = prompt("Lütfen bu tur için bir isim girin:", "Yeni Showroom");

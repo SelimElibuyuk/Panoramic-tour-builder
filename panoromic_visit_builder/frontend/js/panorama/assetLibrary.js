@@ -81,8 +81,7 @@ async function loadAssetList() {
     }
 }
 
-fileInput.addEventListener('change', async (e) => {
-    e.preventDefault();
+fileInput.addEventListener('change', async () => {
     const file = fileInput.files[0];
     if (!file) return;
 

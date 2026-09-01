@@ -1,10 +1,10 @@
 import { stage, layer, transformer, hotspottransformer, sidebar2, objectsidebar, objecttransformer, visiontransformer } from './script.js';
 import { initViewer, showPanorama, resizeViewer, getViewer, onViewerReady } from '/panoromic_visit_builder/frontend/js/panorama/panorama.js';
-import { getGroup } from './addgroup.js';
+import { getGroup, getAbsoluteBoundaryPoints } from './addgroup.js';
 import { addMarkersForNode } from './panorama/hotspots.js';
 import { removeVisionCone } from '/panoromic_visit_builder/frontend/js/panorama/visioncone.js';
 import { openAssetLibrary } from '/panoromic_visit_builder/frontend/js/panorama/assetlibrary.js';
-
+import { applyMiniMapCrop, restoreFullView } from '/panoromic_visit_builder/frontend/js/minimap.js';
 
 const addNodebutton = document.getElementById('Node-tool');
 const changecolorbutton = document.getElementById('Change-color-tool');
@@ -18,9 +18,7 @@ const removeObjectButton = document.querySelectorAll('.remove-item');
 const konvaKutusu = document.getElementById('konva-container');
 const panoramaKutusu = document.getElementById('container');
 
-
-let panoramicpath = 'assets/panorama/panorama.jfif';
-
+const MINI_W = 300, MINI_H = 200; // must match CSS
 let selectedNode = null;
 
 export function setSelectedNode(node) {
@@ -31,11 +29,19 @@ export function getSelectedNode() {
     return selectedNode;
 }
 
-export function setPanoramicpath(path) {
-    panoramicpath = path;
+function toggleMiniMap(stage, layer, isMiniMap) {
+    if (isMiniMap) {
+        container.classList.add('mini-map-modu');
+        stage.width(MINI_W);
+        stage.height(MINI_H);
+        applyMiniMapCrop(stage, layer, MINI_W, MINI_H);
+    } else {
+        container.classList.remove('mini-map-modu');
+        stage.width(1200);
+        stage.height(800);
+        restoreFullView(stage);
+    }
 }
-
-setPanoramicpath('assets/panorama/Soissons_Cathedral_Interior_360x180,_Picardy,_France_-_Diliff.jpg');
 
 removeObjectButton.forEach(button => {
     button.addEventListener('click', function () {
@@ -111,13 +117,14 @@ setPanoramaButton?.addEventListener('click', function (e) {
     });
 });
 
-setObjectButton?.addEventListener('click', function () {
+setObjectButton?.addEventListener('click', function (e) {
+    e.preventDefault();
     const object = objecttransformer.nodes()[0];
     if (!object) return;
 
     openAssetLibrary('model', (url) => {
-        selectedNode.setAttr('modelUrl', url);
-        console.log(`Obje ${selectedNode._id} modeli ayarlandı:`, url);
+        object.setAttr('modelUrl', url);
+        console.log(`Obje ${object._id} modeli ayarlandı:`, url);
     });
 });
 
