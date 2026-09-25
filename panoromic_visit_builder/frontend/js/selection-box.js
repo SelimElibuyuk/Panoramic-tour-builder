@@ -1,4 +1,5 @@
-import { stage, layer, transformer, hotspottransformer,sidebar2 } from './script.js';
+import { stage, layer, transformer, hotspottransformer, sidebar2 } from './script.js';
+import { isViewer } from './mode.js';
 
 let selectionRectangle = new Konva.Rect({
     fill: 'rgba(0,0,255,0.5)', // Yarı saydam mavi
@@ -9,6 +10,7 @@ layer.add(selectionRectangle);
 let x1, y1, x2, y2;
 
 stage.on('mousedown touchstart', (e) => {
+    if (isViewer()) return;
     // Sadece boş sahneye tıklandıysa seçim kutusunu başlat
     if (e.target !== stage) {
         return;

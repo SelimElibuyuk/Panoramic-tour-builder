@@ -2,6 +2,9 @@ import { getViewer, getModelPlugin } from '/panoromic_visit_builder/frontend/js/
 import { MarkersPlugin } from '@photo-sphere-viewer/markers-plugin';
 import { stage } from '/panoromic_visit_builder/frontend/js/script.js';
 import { openInfoPanel } from '/panoromic_visit_builder/frontend/js/panorama/informationPanel.js';
+import { selectObjectNode } from '/panoromic_visit_builder/frontend/js/panorama/modelControls.js';
+
+let modelSelectListenerAdded = false;
 
 const VISION_RADIUS = 200; // pixels, adjust as needed
 const Offset = 0.1; // radians, adjust to rotate the marker placement around the center node
@@ -31,36 +34,46 @@ export function addMarker(yaw, pitch, targetNode = null) {
         });
     }
     else {
-        // object-obje nodes become real 3D models instead of a flat placeholder image
         const modelPlugin = getModelPlugin();
-        if (modelPlugin) {
-            modelPlugin.clearAllModels();
-        }
         if (!modelPlugin) {
             console.error('addMarker: model plugin not ready yet');
             return;
         }
 
-        const modelUrl = targetNode.getAttr('modelUrl') || 'assets/3dmodels/box.glb'; // <-- this line must exist
-        console.log('Placing model at yaw:', yaw, 'pitch:', pitch);
+        const modelUrl = targetNode.getAttr('modelUrl') || 'assets/3dmodels/box.glb';
         modelPlugin.addModel({
             id: 'model-' + targetNode._id,
             url: modelUrl,
             yaw,
             pitch: -0.3,
             distance: 4,
-            scale: targetNode.getAttr('modelScale') || 1,
+            scale: targetNode.getAttr('modelScale') ?? 1,
+            rotation: {
+                x: targetNode.getAttr('modelRotX') ?? 0,
+                y: targetNode.getAttr('modelRotY') ?? 0,
+                z: targetNode.getAttr('modelRotZ') ?? 0
+            },
             data: {
                 targetNodeId: targetNode._id,
                 targetNodeRef: targetNode,
                 name: targetNode.getAttr('objectName') || 'Object'
             }
         });
-        modelPlugin.addEventListener('select-model', (event) => {
-            const { hotspotId, data } = event.detail;
-            openInfoPanel(data.targetNodeRef);
-            console.log('Model selected:', data);
-        });
+
+        if (!modelSelectListenerAdded) {
+            modelSelectListenerAdded = true;
+            modelPlugin.addEventListener('select-model', (event) => {
+                const node = event.detail.data.targetNodeRef;
+                if (document.documentElement.classList.contains('mode-viewer')) {
+                    openInfoPanel({
+                        title: node.getAttr('objectName'),
+                        descriptionHtml: node.getAttr('objectDescription')
+                    });
+                } else {
+                    selectObjectNode(node);
+                }
+            });
+        }
     }
 }
 
@@ -123,6 +136,7 @@ export function addMarkersForNode(centerNode) {
     }
     const markersPlugin = viewer.getPlugin(MarkersPlugin);
     markersPlugin.clearMarkers(); // clear old markers from the previous panorama first
+    getModelPlugin()?.clearAllModels();
 
     const targets = findMarkerLocations(centerNode);
     targets.forEach(({ node, yaw, pitch }) => {

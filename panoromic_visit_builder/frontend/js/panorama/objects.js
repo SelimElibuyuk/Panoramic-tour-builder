@@ -43,30 +43,52 @@ export class ModelHotspotsPlugin extends AbstractPlugin {
         super.destroy();
     }
 
-    addModel({ id, url, yaw, pitch, distance = 5, scale = 1, data = {} }) {
-        return new Promise((resolve, reject) => {
-            this.loader.load(
-                url,
-                (gltf) => {
-                    const mesh = gltf.scene;
-                    const { x, y, z } = sphericalToCartesian(yaw, pitch, distance);
-                    mesh.position.set(x, y, z);
-                    mesh.scale.setScalar(scale);
-                    mesh.userData = { hotspotId: id, ...data };
+addModel({ id, url, yaw, pitch, distance = 5, scale = 1, rotation = { x: 0, y: 0, z: 0 }, data = {} }) {
+    return new Promise((resolve, reject) => {
+        this.loader.load(
+            url,
+            (gltf) => {
+                const mesh = gltf.scene;
+                const { x, y, z } = sphericalToCartesian(yaw, pitch, distance);
+                mesh.position.set(x, y, z);
+                mesh.scale.setScalar(scale);
+                mesh.rotation.order = 'YXZ'; // Y = yatay dönüş, X = eğim, Z = yan yatma
+                mesh.rotation.set(
+                    THREE.MathUtils.degToRad(rotation.x),
+                    THREE.MathUtils.degToRad(rotation.y),
+                    THREE.MathUtils.degToRad(rotation.z)
+                );
+                mesh.userData = { hotspotId: id, ...data };
 
-                    this.scene.add(mesh);
-                    this.models.set(id, { mesh, data });
-                    this.viewer.needsUpdate();
-                    resolve(mesh);
-                },
-                undefined,
-                (error) => {
-                    console.error(`Failed to load model ${id}:`, error);
-                    reject(error);
-                }
-            );
-        });
+                this.scene.add(mesh);
+                this.models.set(id, { mesh, data });
+                this.viewer.needsUpdate();
+                resolve(mesh);
+            },
+            undefined,
+            (error) => {
+                console.error(`Failed to load model ${id}:`, error);
+                reject(error);
+            }
+        );
+    });
+}
+
+updateModel(id, { scale, rotation } = {}) {
+    const entry = this.models.get(id);
+    if (!entry) return false; // model şu an panoramada değil
+    const { mesh } = entry;
+    if (scale !== undefined) mesh.scale.setScalar(scale);
+    if (rotation) {
+        mesh.rotation.set(
+            THREE.MathUtils.degToRad(rotation.x),
+            THREE.MathUtils.degToRad(rotation.y),
+            THREE.MathUtils.degToRad(rotation.z)
+        );
     }
+    this.viewer.needsUpdate();
+    return true;
+}
 
     removeModel(id) {
         const entry = this.models.get(id);

@@ -1,16 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>panoramic view creator</title>
+    <title>Panoramik Tur Oluşturucu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <script src="https://unpkg.com/konva@9/konva.min.js" , defer></script>
     <script src="https://unpkg.com/konva@9/konva.min.js"></script>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core@5/index.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/markers-plugin@5/index.css" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css">
+    <link rel="stylesheet" href="style.css">
 
     <script src="https://cdn.jsdelivr.net/npm/polybooljs@1.2.0/dist/polybool.min.js"></script>
 
@@ -19,138 +24,140 @@
       "imports": {
         "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
         "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/",
-
         "@photo-sphere-viewer/core": "https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core@5/index.module.js",
         "@photo-sphere-viewer/markers-plugin": "https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/markers-plugin@5/index.module.js"
       }
     }
     </script>
-
-
+    <script>
+        if (new URLSearchParams(location.search).has('tour'))
+            document.documentElement.classList.add('shared-view', 'mode-viewer');
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
 </head>
 
 <body>
-    <div id="side-bar">
-        <h2>Tools</h2>
-        <li>
-            <button id="rectangle-tool" , type="button">
-                <span class="button_top"> Rectangle </span>
+    <!-- Üst bar -->
+    <header id="topbar">
+        <div class="brand builder-only">
+            <span class="brand-mark"></span>
+            <span class="brand-name">Panoramik Tur</span>
+        </div>
+        <div class="topbar-actions">
+            <button id="btn-load-tours" class="btn btn-ghost builder-only" type="button">
+                <span class="button_top">Kayıtlı turlarım</span>
             </button>
-        </li>
-        <li>
-            <button id="Circle-tool" , type="button">
-                <span class="button_top"> Circle </span>
+            <button id="Save-tool" class="btn btn-ghost builder-only" type="button">
+                <span class="button_top">Kaydet</span>
             </button>
-        </li>
-        <li>
-            <button id="Finish" , type="button">
-                <span class="button_top"> Finish Room </span>
+            <button id="Share-tool" class="btn btn-ghost builder-only" type="button">
+                <span class="button_top">Paylaş</span>
             </button>
-        </li>
-        <li>
-            <button id="Node-tool" , type="button">
-                <span class="button_top"> Add Node </span>
-            </button>
-        </li>
-        <li>
-            <button id="Object-tool" , type="button">
-                <span class="button_top"> Add Object </span>
-            </button>
-        </li>
-        <li>
-            <button id="Switch-panorama-tool" , type="button">
-                <span class="button_top"> Switch Panorama </span>
-            </button>
-        </li>
-        <li>
-            <button id="Save-tool" , type="button">
-                <span class="button_top"> Save </span>
-            </button>
-        </li>
-        <li> <button id="btn-load-tours" , type="button">
-                <span class="button_top">Kayıtlı Turlarım</span>
-            </button>
-        </li>
+            <button id="mode-toggle" class="btn btn-primary" type="button">▶ Viewer'ı Test Et</button>
+        </div>
+    </header>
 
+    <!-- Sol araç çubuğu -->
+    <aside id="side-bar" class="builder-only">
+        <section class="tool-group">
+            <h2>Oda çiz</h2>
+            <ul>
+                <li><button id="rectangle-tool" type="button"><span class="button_top">Dikdörtgen</span></button></li>
+                <li><button id="Circle-tool" type="button"><span class="button_top">Daire</span></button></li>
+                <li><button id="Finish" type="button"><span class="button_top">Odayı bitir</span></button></li>
+            </ul>
+        </section>
+        <section class="tool-group">
+            <h2>Yerleştir</h2>
+            <ul>
+                <li><button id="Node-tool" type="button"><span class="button_top">Nokta ekle</span></button></li>
+                <li><button id="Object-tool" type="button"><span class="button_top">Obje ekle</span></button></li>
+            </ul>
+        </section>
+        <section class="tool-group">
+            <h2>Görünüm</h2>
+            <ul>
+                <li><button id="Switch-panorama-tool" type="button"><span class="button_top">Panoramayı
+                            aç</span></button></li>
+            </ul>
+        </section>
+    </aside>
 
-
-
-    </div>
     <div class='main-container'>
-
         <div id="konva-container"></div>
-
         <div id="container"></div>
     </div>
 
-
-    <div id="side-bar2">
-        <h2>Properties</h2>
+    <!-- Sağ özellik panelleri (JS visibility ile açıp kapatır) -->
+    <aside id="side-bar2" class="builder-only">
+        <h2>Nokta özellikleri</h2>
         <div id="properties">
-            <li>
-                <button id="Change-color-tool" type="button">
-                    <span class="button_top"> Change Color </span>
-                </button>
+            <li><button id="Change-color-tool" type="button"><span class="button_top">Rengi değiştir</span></button>
             </li>
-            <li>
-                <button id="Set-panorama-tool" type="button">
-                    <span class="button_top"> Set Panorama </span>
-                </button>
-            </li>
-            <li>
-                <button id="Remove-object-tool" class="remove-item" , type="button">
-                    <span class="button_top"> Remove Object </span>
-                </button>
-            </li>
+            <li><button id="Set-panorama-tool" type="button"><span class="button_top">Panorama seç</span></button></li>
+            <li><button id="Remove-object-tool" class="remove-item" type="button"><span
+                        class="button_top">Sil</span></button></li>
         </div>
-    </div>
-    <div id="object-side-bar">
-        <h2>Properties</h2>
+    </aside>
+    <aside id="object-side-bar" class="builder-only">
+        <h2>Obje özellikleri</h2>
         <div id="properties">
-            <li>
-                <button id="Change-color-tool" , type="button">
-                    <span class="button_top"> Change Color </span>
-                </button>
+            <li><button id="Change-color-tool" type="button"><span class="button_top">Rengi değiştir</span></button>
             </li>
-            <li>
-                <button id="Set-object-tool" , type="button">
-                    <span class="button_top"> Set Object </span>
-                </button>
-            </li>
-            <li>
-                <button id="Remove-object-tool" , class="remove-item" , type="button">
-                    <span class="button_top"> Remove Object </span>
-                </button>
-            </li>
+            <li><button id="Set-object-tool" type="button"><span class="button_top">3D model seç</span></button></li>
+            <li><button id="Set-info-tool" type="button"><span class="button_top">Bilgi düzenle</span></button></li>
+            <li><button id="Remove-object-tool" class="remove-item" type="button"><span
+                        class="button_top">Sil</span></button></li>
         </div>
-    </div>
+        <div class="model-controls">
+            <h3>3D model ayarı</h3>
+            <div class="slider-row">
+                <label for="model-scale">Boyut <output id="model-scale-val">1.00×</output></label>
+                <input id="model-scale" type="range" min="0.1" max="5" step="0.05" value="1">
+            </div>
+            <div class="slider-row">
+                <label for="model-rot-y">Yatay dönüş <output id="model-rot-y-val">0°</output></label>
+                <input id="model-rot-y" type="range" min="-180" max="180" step="1" value="0">
+            </div>
+            <div class="slider-row">
+                <label for="model-rot-x">Eğim <output id="model-rot-x-val">0°</output></label>
+                <input id="model-rot-x" type="range" min="-180" max="180" step="1" value="0">
+            </div>
+            <div class="slider-row">
+                <label for="model-rot-z">Yan yatma <output id="model-rot-z-val">0°</output></label>
+                <input id="model-rot-z" type="range" min="-180" max="180" step="1" value="0">
+            </div>
+            <button id="model-reset" type="button"><span class="button_top">Sıfırla</span></button>
+            <p class="model-hint">Önizleme için, bu objenin görüş alanındaki bir noktanın panoramasını açın.</p>
+        </div>
+    </aside>
 
+    <!-- Modallar -->
     <div id="tours-modal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Kayıtlı Showroomlar</h2>
+                <h2>Kayıtlı turlarım</h2>
                 <span id="close-tours-modal" class="close-btn">&times;</span>
             </div>
-            <div id="tours-list-container">
-                <!-- Turlar buraya JavaScript ile eklenecek -->
-            </div>
+            <div id="tours-list-container"></div>
         </div>
     </div>
+
     <div id="tour-preview-modal" class="modal-overlay">
         <div class="modal-content preview-modal-content">
             <div class="modal-header">
-                <h2 id="preview-tour-name">Showroom Önizleme</h2>
+                <h2 id="preview-tour-name">Tur önizleme</h2>
                 <span id="close-preview-modal" class="close-btn">&times;</span>
             </div>
             <div class="preview-body">
                 <div class="preview-image-wrapper">
-                    <img id="preview-tour-image" src="" alt="Showroom Preview" />
+                    <img id="preview-tour-image" src="" alt="Tur önizlemesi" />
                 </div>
                 <p id="preview-tour-date" class="preview-date"></p>
             </div>
             <div class="preview-actions">
-                <button id="preview-btn-load" class="btn-load-tour" , type="button">Yükle</button>
-                <button id="preview-btn-delete" class="btn-delete-tour" , type="button">Sil</button>
+                <button id="preview-btn-load" class="btn-load-tour" type="button">Yükle</button>
+                <button id="preview-btn-delete" class="btn-delete-tour" type="button">Sil</button>
             </div>
         </div>
     </div>
@@ -161,53 +168,53 @@
                 <h2 id="asset-library-title">Kütüphane</h2>
                 <span id="close-asset-library-modal" class="close-btn">&times;</span>
             </div>
-
             <div class="asset-upload-row">
-                <label for="asset-file-input" class="btn-upload-asset">
-                    + Yeni Dosya Yükle
-                </label>
+                <label for="asset-file-input" class="btn-upload-asset">Dosya yükle</label>
                 <input type="file" id="asset-file-input" style="display:none;" />
             </div>
-
             <div id="asset-library-grid"></div>
         </div>
     </div>
-    <!-- Obje Bilgi Paneli -->
-    <div id="object-info-panel" class="info-panel">
 
-        <!-- Üst Kısım (Başlık ve Kapatma Butonu) -->
-        <div class="info-panel-header">
-            <h3 class="info-title">Obje Başlığı</h3>
-            <button id="close-info-panel" class="info-close-btn" type="button">&times;</button>
-        </div>
-
-        <!-- Orta Kısım (İçerik, Görsel ve Detaylar) -->
-        <div class="info-panel-body">
-            <img src="https://via.placeholder.com/400x250" alt="Obje Görseli" class="info-image">
-
-            <p class="info-description">
-                Bu obje hakkında detaylı bilgi alanı. Panoramik tur içerisindeki bir noktaya veya 3D modele
-                tıklandığında bu alan objeye özel verilerle dolacak.
-            </p>
-
-            <!-- Özellikler Tablosu/Listesi -->
-            <div class="info-details">
-                <div class="info-row">
-                    <span class="info-label">Kategori:</span>
-                    <span class="info-value">Dekorasyon</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">Materyal:</span>
-                    <span class="info-value">Ahşap / Metal</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">Durum:</span>
-                    <span class="info-value" style="color: #2ecc71; font-weight: bold;">Mevcut</span>
-                </div>
+    <div id="object-info-modal" class="modal-overlay builder-only">
+        <div class="modal-content editor-modal-content">
+            <div class="modal-header">
+                <h2>Obje bilgisi</h2>
+                <span id="close-object-info-modal" class="close-btn">&times;</span>
+            </div>
+            <label class="field-label" for="object-name-input">İsim</label>
+            <input id="object-name-input" type="text" maxlength="80" placeholder="Örn. Ahşap koltuk">
+            <label class="field-label">Açıklama</label>
+            <div id="object-desc-editor"></div>
+            <div class="preview-actions">
+                <button id="object-info-cancel" class="btn-delete-tour" type="button">Vazgeç</button>
+                <button id="object-info-save" class="btn-load-tour" type="button">Kaydet</button>
             </div>
         </div>
-
     </div>
+
+    <!-- Obje bilgi paneli (viewer'da da görünür) -->
+    <div id="object-info-panel" class="info-panel">
+        <div class="info-panel-header">
+            <h3 class="info-title">Obje başlığı</h3>
+            <button id="close-info-panel" class="info-close-btn" type="button">&times;</button>
+        </div>
+        <div class="info-panel-body">
+            <img src="assets/panorama/placeholder.jpg" alt="Obje görseli" class="info-image">
+            <div class="info-description">
+                Bu obje hakkında detaylı bilgi alanı. ...
+            </div>
+            <div class="info-details">
+                <div class="info-row"><span class="info-label">Kategori</span><span class="info-value">Dekorasyon</span>
+                </div>
+                <div class="info-row"><span class="info-label">Materyal</span><span class="info-value">Ahşap /
+                        Metal</span></div>
+                <div class="info-row"><span class="info-label">Durum</span><span
+                        class="info-value info-ok">Mevcut</span></div>
+            </div>
+        </div>
+    </div>
+
     <script type="module" src="js/main.js"></script>
 </body>
 

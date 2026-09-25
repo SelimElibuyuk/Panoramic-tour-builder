@@ -1,5 +1,5 @@
 import { stage, layer, transformer, hotspottransformer, sidebar2, objectsidebar, objecttransformer, visiontransformer } from './script.js';
-import { initViewer, showPanorama, resizeViewer, getViewer, onViewerReady } from '/panoromic_visit_builder/frontend/js/panorama/panorama.js';
+import { initViewer, showPanorama, resizeViewer, getViewer, onViewerReady, getModelPlugin } from '/panoromic_visit_builder/frontend/js/panorama/panorama.js';
 import { getGroup, getAbsoluteBoundaryPoints } from './addgroup.js';
 import { addMarkersForNode } from './panorama/hotspots.js';
 import { removeVisionCone } from '/panoromic_visit_builder/frontend/js/panorama/visioncone.js';
@@ -256,3 +256,23 @@ switchpanoramabutton?.addEventListener('click', function () {
 });
 
 
+export function exitPanoramaView() {
+    if (previouslySelectedNode) {
+        resetColor(previouslySelectedNode);
+        removeVisionCone(previouslySelectedNode);
+        previouslySelectedNode = null;
+    }
+    setSelectedNode(null);
+
+    panoramaKutusu.style.visibility = 'hidden';
+    konvaKutusu.classList.remove('mini-map-modu');
+
+    stage.find('.panorama-hotspot-obje').forEach(n => n.name('hotspot-obje'));
+
+    const viewer = getViewer();
+    if (viewer) {
+        viewer.getPlugin('markers')?.clearMarkers();
+        getModelPlugin()?.clearAllModels();
+    }
+    layer.draw();
+}

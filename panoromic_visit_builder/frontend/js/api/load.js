@@ -1,5 +1,5 @@
 import { stage, layer, transformer, hotspottransformer, sidebar2, objectsidebar, objecttransformer, visiontransformer } from '/panoromic_visit_builder/frontend/js/script.js';
-
+import { applyTourData } from '../tourLoader.js';
 const btnLoadTours = document.getElementById('btn-load-tours');
 const modalOverlay = document.getElementById('tours-modal');
 const btnCloseModal = document.getElementById('close-tours-modal');
@@ -41,29 +41,13 @@ function openPreviewModal(tur) {
 }
 
 function loadTour(tur) {
-    console.log("Seçilen Tur Verisi:", tur);
-
     window.aktifTurId = tur.id;
     window.aktifTurAdi = tur.name;
 
-    const eskiCizimler = stage.find('.secilebilir-obje, .kilitli-obje, .gruplanmis-parca, .panorama-hotspot-obje');
-    eskiCizimler.forEach(obje => obje.destroy());
+    applyTourData(tur);
 
-    transformer.nodes([]);
-
-    const kaydedilmisSekiller = tur.konva_data.children[0].children;
-
-    kaydedilmisSekiller.forEach(sekilVerisi => {
-        if (sekilVerisi.className !== 'Transformer') {
-            const yeniObje = Konva.Node.create(sekilVerisi);
-            layer.add(yeniObje);
-        }
-    });
-
-    layer.draw();
     modalOverlay.classList.remove('active');
     previewModal.classList.remove('active');
-
     alert(`'${tur.name}' projesi başarıyla yüklendi!`);
 }
 

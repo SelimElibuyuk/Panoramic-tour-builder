@@ -1,5 +1,7 @@
 import { stage, sidebar2, transformer, hotspottransformer, objecttransformer, objectsidebar, visiontransformer, layer } from "./script.js";
 import { switchToPanoramaView } from "./buttons.js";
+import { isViewer } from './mode.js';
+import { syncModelControls } from '/panoromic_visit_builder/frontend/js/panorama/modelControls.js';
 
 stage.on('click tap', function (e) {
 
@@ -26,11 +28,13 @@ stage.on('click tap', function (e) {
         }
         return;
     }
+    if (isViewer()) return
 
-    if (target.hasName('object-obje')) {
-        objecttransformer.nodes([target]);
-        objectsidebar.style.visibility = 'visible';
-    }
+if (target.hasName('object-obje')) {
+    objecttransformer.nodes([target]);
+    objectsidebar.style.visibility = 'visible';
+    syncModelControls(target);
+}
 
     if (target.hasName('secilebilir-obje')) {
         transformer.nodes([target]);

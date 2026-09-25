@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request, UploadFile, File
+from fastapi import FastAPI, Request, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 import json
@@ -175,6 +175,23 @@ async def get_tours():
             return []
 
     return []
+
+@app.get("/api/get-tour/{tour_id}")
+async def get_tour(tour_id: str):
+    file_path = os.path.join(SAVE_DIR, "tour_data.json")
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="Tur bulunamadı")
+
+    with open(file_path, "r", encoding="utf-8") as f:
+        try:
+            tours = json.load(f)
+        except json.JSONDecodeError:
+            raise HTTPException(status_code=404, detail="Tur bulunamadı")
+
+    tour = next((t for t in tours if t.get("id") == tour_id), None)
+    if not tour:
+        raise HTTPException(status_code=404, detail="Tur bulunamadı")
+    return tour
 
 
 @app.delete("/api/delete-tour/{tour_id}")

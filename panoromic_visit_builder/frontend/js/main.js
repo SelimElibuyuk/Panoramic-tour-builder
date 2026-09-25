@@ -10,3 +10,5 @@ import './panorama/visioncone.js';
 import './api/save.js';
 import './api/load.js';
 import './api/delete.js';
+import './mode.js';
+import './panorama/objectInfoEditor.js';
