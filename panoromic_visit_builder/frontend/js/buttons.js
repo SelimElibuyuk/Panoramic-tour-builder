@@ -3,7 +3,7 @@ import { initViewer, showPanorama, resizeViewer, getViewer, onViewerReady, getMo
 import { getGroup, getAbsoluteBoundaryPoints } from './addgroup.js';
 import { addMarkersForNode } from './panorama/hotspots.js';
 import { removeVisionCone } from '/panoromic_visit_builder/frontend/js/panorama/visioncone.js';
-import { openAssetLibrary } from '/panoromic_visit_builder/frontend/js/panorama/assetlibrary.js';
+import { openAssetLibrary } from '/panoromic_visit_builder/frontend/js/panorama/assetLibrary.js';
 import { applyMiniMapCrop, restoreFullView } from '/panoromic_visit_builder/frontend/js/minimap.js';
 
 const addNodebutton = document.getElementById('Node-tool');

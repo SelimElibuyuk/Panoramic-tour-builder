@@ -1,0 +1,24 @@
+services:
+  backend:
+    build:
+      context: ./panoromic_visit_builder/backend
+    container_name: panoramic-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      # Backend "../frontend/assets/..." okuyup yazdığı için, gerçek
+      # frontend/assets klasörünü konteynerin aynı göreli konumuna bağlıyoruz.
+      # Bu sayede yüklenen panorama/model/önizleme dosyaları kalıcı olur.
+      - ./panoromic_visit_builder/frontend/assets:/app/panoromic_visit_builder/frontend/assets
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+      dockerfile: panoromic_visit_builder/frontend/Dockerfile
+    container_name: panoramic-frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    restart: unless-stopped

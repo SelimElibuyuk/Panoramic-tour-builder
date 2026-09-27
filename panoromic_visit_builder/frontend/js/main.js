@@ -12,3 +12,5 @@ import './api/load.js';
 import './api/delete.js';
 import './mode.js';
 import './panorama/objectInfoEditor.js';
+import './panorama/assetLibrary.js';
+import './minimap.js';
