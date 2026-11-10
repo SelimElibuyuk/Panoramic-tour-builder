@@ -1,222 +1,208 @@
-from fastapi import FastAPI, Request, UploadFile, File, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
-import json
-import os
+"""Panoramik Tur Oluşturucu - API
+
+Çalıştırma (backend klasöründen):
+    uvicorn main:app --reload
+Ardından tarayıcıda http://127.0.0.1:8000 adresini açın; frontend de buradan sunulur.
+"""
+
 import base64
-import uuid
-import shutil
+import binascii
+from contextlib import asynccontextmanager
+from typing import Annotated
 
-app = FastAPI()
+from fastapi import FastAPI, File, HTTPException, Path as PathParam, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
+from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel, Field
+
+import migrate_legacy
+import storage
+from settings import ASSET_KINDS, CORS_ORIGINS, FRONTEND_DIR, MAX_PREVIEW_BYTES, MEDIA_DIR
+
+PNG_MAGIC = b"\x89PNG\r\n\x1a\n"
+GLB_MAGIC = b"glTF"
 
 
-origins = [
-    "http://127.0.0.1:5500",
-    "http://localhost:8080",
-    "http://127.0.0.1:8080",
-]
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    storage.init_db()
+    migrate_legacy.run()
+    yield
+
+
+app = FastAPI(title="Panoramik Tur Oluşturucu", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
+    allow_origins=CORS_ORIGINS,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-@app.middleware("http")
-async def add_cors_header_to_static_files(request: Request, call_next):
-    response = await call_next(request)
-    if request.url.path.startswith(("/panorama-assets", "/model-assets", "/previews")):
-        response.headers["Access-Control-Allow-Origin"] = "*"
-        response.headers["Access-Control-Allow-Methods"] = "GET, OPTIONS"
-    return response
 
-SAVE_DIR = "../frontend/assets/tourdata"
-PREVIEW_DIR = os.path.join(SAVE_DIR, "previews")
-PANORAMA_DIR = "../frontend/assets/panorama"
-MODEL_DIR = "../frontend/assets/3dmodels"
+# ---------------------------------------------------------------- modeller
 
-os.makedirs(SAVE_DIR, exist_ok=True)
-os.makedirs(PREVIEW_DIR, exist_ok=True)
-os.makedirs(PANORAMA_DIR, exist_ok=True)
-os.makedirs(MODEL_DIR, exist_ok=True)
-
-app.mount("/previews", StaticFiles(directory=PREVIEW_DIR), name="previews")
-app.mount("/panorama-assets", StaticFiles(directory=PANORAMA_DIR), name="panorama-assets")
-app.mount("/model-assets", StaticFiles(directory=MODEL_DIR), name="model-assets")
+class TourIn(BaseModel):
+    name: str = Field(min_length=1, max_length=120)
+    scene: dict
+    preview: str | None = None  # "data:image/png;base64,..."
 
 
-
-@app.post("/api/upload-panorama")
-async def upload_panorama(file: UploadFile = File(...)):
-    filename = file.filename
-    file_path = os.path.join(PANORAMA_DIR, filename)
-
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
-
-    return {
-        "mesaj": "Panorama yüklendi!",
-        "filename": filename,
-        "original_name": file.filename,
-        "url": f"/panorama-assets/{filename}"
-    }
+class TourPatch(BaseModel):
+    name: str | None = Field(default=None, min_length=1, max_length=120)
+    scene: dict | None = None
+    preview: str | None = None
 
 
-@app.get("/api/list-panoramas")
-async def list_panoramas():
-    files = []
-    for f in os.listdir(PANORAMA_DIR):
-        full_path = os.path.join(PANORAMA_DIR, f)
-        if os.path.isfile(full_path) and f.lower().endswith(('.jpg', '.jpeg', '.png', '.webp')):
-            files.append({
-                "filename": f,
-                "url": f"/panorama-assets/{f}"
-            })
-    return files
+TourId = Annotated[str, PathParam(pattern=storage.TOUR_ID_RE.pattern)]
 
 
-@app.post("/api/upload-model")
-async def upload_model(file: UploadFile = File(...)):
-    filename = file.filename
-    file_path = os.path.join(MODEL_DIR, filename)
-
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
-
-    return {
-        "mesaj": "Model yüklendi!",
-        "filename": filename,
-        "original_name": file.filename,
-        "url": f"/model-assets/{filename}"
-    }
+def _validate_scene(scene: dict) -> None:
+    layer = scene.get("layer") if isinstance(scene, dict) else None
+    if not isinstance(layer, dict) or layer.get("className") != "Layer":
+        raise HTTPException(422, "Geçersiz sahne verisi.")
 
 
-@app.get("/api/list-models")
-async def list_models():
-    files = []
-    for f in os.listdir(MODEL_DIR):
-        full_path = os.path.join(MODEL_DIR, f)
-        if os.path.isfile(full_path) and f.lower().endswith(('.glb', '.gltf')):
-            files.append({
-                "filename": f,
-                "url": f"/model-assets/{f}"
-            })
-    return files
-
-def save_preview_image(tour_id: str, base64_data: str) -> str:
-    """Decodes a base64 data URL and saves it as a PNG file. Returns the relative URL."""
-    # base64_data looks like "data:image/png;base64,iVBORw0KG..."
-    if "," in base64_data:
-        header, encoded = base64_data.split(",", 1)
-    else:
-        encoded = base64_data
-
-    image_bytes = base64.b64decode(encoded)
-    file_name = f"{tour_id}.png"
-    file_path = os.path.join(PREVIEW_DIR, file_name)
-
-    with open(file_path, "wb") as f:
-        f.write(image_bytes)
-
-    return f"/previews/{file_name}"
+def _decode_preview(data_url: str | None) -> bytes | None:
+    """Önizlemeyi kayıttan ÖNCE doğrular; hatalıysa tur hiç değişmez."""
+    if not data_url:
+        return None
+    encoded = data_url.split(",", 1)[1] if "," in data_url else data_url
+    try:
+        png = base64.b64decode(encoded, validate=True)
+    except (binascii.Error, ValueError):
+        raise HTTPException(422, "Önizleme görseli çözümlenemedi.")
+    if len(png) > MAX_PREVIEW_BYTES or not png.startswith(PNG_MAGIC):
+        raise HTTPException(422, "Önizleme görseli geçersiz.")
+    return png
 
 
-@app.post("/api/save-map")
-async def save_map(request: Request):
-    data = await request.json()
-    tour_id = data.get("id")
+# ---------------------------------------------------------------- turlar
 
-    # handle preview image, if the frontend sent one
-    preview_image_data = data.pop("preview_image_base64", None)  # remove raw base64 before saving JSON
-    if preview_image_data:
-        preview_url = save_preview_image(tour_id, preview_image_data)
-        data["preview_image"] = preview_url  # store just the URL/path in the JSON record
-
-    file_path = os.path.join(SAVE_DIR, "tour_data.json")
-
-    if os.path.exists(file_path):
-        try:
-            with open(file_path, "r", encoding="utf-8") as f:
-                tours = json.load(f)
-        except json.JSONDecodeError:
-            tours = []
-    else:
-        tours = []
-
-    existing_tour = next((t for t in tours if t.get("id") == tour_id), None)
-
-    if existing_tour:
-        # keep the old preview_image if this save didn't include a new one
-        if "preview_image" not in data and "preview_image" in existing_tour:
-            data["preview_image"] = existing_tour["preview_image"]
-        tours.remove(existing_tour)
-        tours.append(data)
-        mesaj = f"'{data.get('name')}' başarıyla güncellendi!"
-    else:
-        tours.append(data)
-        mesaj = f"'{data.get('name')}' yeni bir tur olarak kaydedildi!"
-
-    with open(file_path, "w", encoding="utf-8") as f:
-        json.dump(tours, f, ensure_ascii=False, indent=4)
-
-    return {"mesaj": mesaj, "id": tour_id}
+@app.get("/api/health")
+def health():
+    return {"ok": True}
 
 
-@app.get("/api/get-tours")
-async def get_tours():
-    file_path = os.path.join(SAVE_DIR, "tour_data.json")
+@app.get("/api/tours")
+def list_tours():
+    return storage.list_tours()
 
-    if os.path.exists(file_path):
-        try:
-            with open(file_path, "r", encoding="utf-8") as f:
-                tours = json.load(f)
-                return tours
-        except json.JSONDecodeError:
-            return []
 
-    return []
-
-@app.get("/api/get-tour/{tour_id}")
-async def get_tour(tour_id: str):
-    file_path = os.path.join(SAVE_DIR, "tour_data.json")
-    if not os.path.exists(file_path):
-        raise HTTPException(status_code=404, detail="Tur bulunamadı")
-
-    with open(file_path, "r", encoding="utf-8") as f:
-        try:
-            tours = json.load(f)
-        except json.JSONDecodeError:
-            raise HTTPException(status_code=404, detail="Tur bulunamadı")
-
-    tour = next((t for t in tours if t.get("id") == tour_id), None)
+@app.get("/api/tours/{tour_id}")
+def get_tour(tour_id: TourId):
+    tour = storage.get_tour(tour_id)
     if not tour:
-        raise HTTPException(status_code=404, detail="Tur bulunamadı")
+        raise HTTPException(404, "Tur bulunamadı.")
     return tour
 
 
-@app.delete("/api/delete-tour/{tour_id}")
-async def delete_tour(tour_id: str):
-    file_path = os.path.join(SAVE_DIR, "tour_data.json")
+@app.post("/api/tours", status_code=201)
+def create_tour(body: TourIn):
+    _validate_scene(body.scene)
+    preview = _decode_preview(body.preview)
+    tour = storage.create_tour(body.name.strip(), body.scene)
+    if preview:
+        storage.save_preview(tour["id"], preview)
+    return storage.get_tour(tour["id"])
 
-    if not os.path.exists(file_path):
-        return {"hata": "Dosya bulunamadı"}
 
-    with open(file_path, "r", encoding="utf-8") as f:
-        tours = json.load(f)
+@app.put("/api/tours/{tour_id}")
+def update_tour(body: TourPatch, tour_id: TourId):
+    if body.scene is not None:
+        _validate_scene(body.scene)
+    preview = _decode_preview(body.preview)
+    name = body.name.strip() if body.name else None
+    tour = storage.update_tour(tour_id, name, body.scene)
+    if not tour:
+        raise HTTPException(404, "Tur bulunamadı.")
+    if preview:
+        storage.save_preview(tour_id, preview)
+    return storage.get_tour(tour_id)
 
-    guncel_turlar = [t for t in tours if t.get("id") != tour_id]
 
-    if len(tours) != len(guncel_turlar):
-        with open(file_path, "w", encoding="utf-8") as f:
-            json.dump(guncel_turlar, f, ensure_ascii=False, indent=4)
+@app.delete("/api/tours/{tour_id}", status_code=204)
+def delete_tour(tour_id: TourId):
+    if not storage.delete_tour(tour_id):
+        raise HTTPException(404, "Tur bulunamadı.")
 
-        # also clean up the preview image file
-        preview_path = os.path.join(PREVIEW_DIR, f"{tour_id}.png")
-        if os.path.exists(preview_path):
-            os.remove(preview_path)
 
-        return {"mesaj": "Tur başarıyla silindi!"}
+# ---------------------------------------------------------------- dosyalar
 
-    return {"hata": "Tur bulunamadı"}
+def _check_kind(kind: str) -> dict:
+    cfg = ASSET_KINDS.get(kind)
+    if not cfg:
+        raise HTTPException(404, "Bilinmeyen dosya türü.")
+    return cfg
+
+
+@app.get("/api/assets/{kind}")
+def list_assets(kind: str):
+    _check_kind(kind)
+    return storage.list_assets(kind)
+
+
+@app.post("/api/assets/{kind}", status_code=201)
+def upload_asset(kind: str, file: UploadFile = File(...)):
+    cfg = _check_kind(kind)
+    original = file.filename or "dosya"
+    ext = "." + original.rsplit(".", 1)[-1].lower() if "." in original else ""
+    if ext not in cfg["extensions"]:
+        allowed = ", ".join(sorted(cfg["extensions"]))
+        raise HTTPException(415, f"Desteklenmeyen dosya uzantısı. İzin verilenler: {allowed}")
+
+    filename = storage.safe_filename(original, ext)
+    target = storage.asset_dir(kind) / filename
+    tmp = target.with_suffix(target.suffix + ".part")
+    limit = cfg["max_mb"] * 1024 * 1024
+    written = 0
+    head = b""
+    try:
+        with tmp.open("wb") as out:
+            while chunk := file.file.read(1024 * 1024):
+                if not head:
+                    head = chunk[:8]
+                written += len(chunk)
+                if written > limit:
+                    raise HTTPException(413, f"Dosya çok büyük (en fazla {cfg['max_mb']} MB).")
+                out.write(chunk)
+        if written == 0:
+            raise HTTPException(422, "Dosya boş.")
+        if kind == "models" and not head.startswith(GLB_MAGIC):
+            raise HTTPException(415, "Bu dosya geçerli bir .glb modeli değil.")
+        tmp.replace(target)
+    finally:
+        tmp.unlink(missing_ok=True)
+
+    return {"filename": filename, "url": storage.asset_url(kind, filename), "size": written}
+
+
+@app.delete("/api/assets/{kind}/{filename}", status_code=204)
+def delete_asset(kind: str, filename: str):
+    _check_kind(kind)
+    path = storage.resolve_asset(kind, filename)
+    if not path:
+        raise HTTPException(404, "Dosya bulunamadı.")
+    path.unlink()
+
+
+# ---------------------------------------------------------------- statik
+
+storage.ensure_dirs()
+app.mount("/media", StaticFiles(directory=MEDIA_DIR), name="media")
+
+if FRONTEND_DIR.is_dir():
+    app.mount("/app", StaticFiles(directory=FRONTEND_DIR, html=True), name="frontend")
+
+    @app.middleware("http")
+    async def revalidate_frontend(request, call_next):
+        # JS modülleri güncellendiğinde tarayıcı eski sürümleri karıştırmasın
+        response = await call_next(request)
+        if request.url.path.startswith("/app"):
+            response.headers["Cache-Control"] = "no-cache"
+        return response
+
+    @app.get("/", include_in_schema=False)
+    def root():
+        return RedirectResponse("/app/")

@@ -3,13 +3,13 @@ services:
     build:
       context: ./panoromic_visit_builder/backend
     container_name: panoramic-backend
-    ports:
-      - "8000:8000"
+    environment:
+      DATA_DIR: /data
+      # Eski sürümün dosyaları ilk açılışta bir kez içe aktarılır (salt okunur).
+      LEGACY_ASSETS_DIR: /legacy
     volumes:
-      # Backend "../frontend/assets/..." okuyup yazdığı için, gerçek
-      # frontend/assets klasörünü konteynerin aynı göreli konumuna bağlıyoruz.
-      # Bu sayede yüklenen panorama/model/önizleme dosyaları kalıcı olur.
-      - ./panoromic_visit_builder/frontend/assets:/app/panoromic_visit_builder/frontend/assets
+      - panoramic-data:/data
+      - ./panoromic_visit_builder/frontend/assets:/legacy:ro
     restart: unless-stopped
 
   frontend:
@@ -22,3 +22,6 @@ services:
     depends_on:
       - backend
     restart: unless-stopped
+
+volumes:
+  panoramic-data:

@@ -5,215 +5,249 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panoramik Tur Oluşturucu</title>
+    <!-- API farklı bir adresteyse buraya yazın (ör. http://127.0.0.1:8000). Boşsa aynı adres kullanılır. -->
+    <meta name="api-base" content="">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <script src="https://unpkg.com/konva@9/konva.min.js"></script>
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core@5/index.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/markers-plugin@5/index.css" />
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core@5.15.1/index.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/markers-plugin@5.15.1/index.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css">
     <link rel="stylesheet" href="style.css">
 
+    <script src="https://cdn.jsdelivr.net/npm/konva@9.3.22/konva.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/polybooljs@1.2.0/dist/polybool.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
 
+    <!-- Photo Sphere Viewer 5.15, three ^0.185 ile derlendi; sürümler birlikte sabitlenmeli. -->
     <script type="importmap">
     {
       "imports": {
-        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/",
-        "@photo-sphere-viewer/core": "https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core@5/index.module.js",
-        "@photo-sphere-viewer/markers-plugin": "https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/markers-plugin@5/index.module.js"
+        "three": "https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.185.1/examples/jsm/",
+        "@photo-sphere-viewer/core": "https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core@5.15.1/index.module.js",
+        "@photo-sphere-viewer/markers-plugin": "https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/markers-plugin@5.15.1/index.module.js"
       }
     }
     </script>
     <script>
+        // Paylaşım linkiyle açılışta builder arayüzü hiç görünmesin
         if (new URLSearchParams(location.search).has('tour'))
             document.documentElement.classList.add('shared-view', 'mode-viewer');
+        else
+            document.documentElement.classList.add('mode-builder');
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
 </head>
 
 <body>
     <!-- Üst bar -->
     <header id="topbar">
         <div class="brand builder-only">
-            <span class="brand-mark"></span>
-            <span class="brand-name">Panoramik Tur</span>
+            <span class="brand-mark" aria-hidden="true"></span>
+            <input id="tour-name" class="tour-name-input" type="text" maxlength="120" value="Yeni tur"
+                aria-label="Tur adı" spellcheck="false">
+            <span id="save-status" class="save-status" aria-live="polite"></span>
         </div>
         <div class="topbar-actions">
-            <button id="btn-load-tours" class="btn btn-ghost builder-only" type="button">
-                <span class="button_top">Kayıtlı turlarım</span>
-            </button>
-            <button id="Save-tool" class="btn btn-ghost builder-only" type="button">
-                <span class="button_top">Kaydet</span>
-            </button>
-            <button id="Share-tool" class="btn btn-ghost builder-only" type="button">
-                <span class="button_top">Paylaş</span>
-            </button>
-            <button id="mode-toggle" class="btn btn-primary" type="button">▶ Viewer'ı Test Et</button>
+            <button id="btn-new" class="btn btn-ghost builder-only" type="button" title="Yeni boş tur">Yeni</button>
+            <button id="btn-tours" class="btn btn-ghost builder-only" type="button">Turlarım</button>
+            <button id="btn-save" class="btn btn-ghost builder-only" type="button" title="Kaydet (Ctrl+S)">Kaydet</button>
+            <button id="btn-share" class="btn btn-ghost builder-only" type="button">Paylaş</button>
+            <button id="mode-toggle" class="btn btn-primary" type="button">▶ Önizle</button>
         </div>
     </header>
 
     <!-- Sol araç çubuğu -->
-    <aside id="side-bar" class="builder-only">
+    <aside id="toolbar" class="builder-only" aria-label="Araçlar">
         <section class="tool-group">
             <h2>Oda çiz</h2>
             <ul>
-                <li><button id="rectangle-tool" type="button"><span class="button_top">Dikdörtgen</span></button></li>
-                <li><button id="Circle-tool" type="button"><span class="button_top">Daire</span></button></li>
-                <li><button id="Finish" type="button"><span class="button_top">Odayı bitir</span></button></li>
+                <li><button class="tool-btn" data-tool="rect" type="button" title="Sürükleyerek dikdörtgen çiz (R)">
+                        <span class="tool-ico ico-rect" aria-hidden="true"></span>Dikdörtgen<kbd>R</kbd></button></li>
+                <li><button class="tool-btn" data-tool="circle" type="button" title="Sürükleyerek daire çiz (C)">
+                        <span class="tool-ico ico-circle" aria-hidden="true"></span>Daire<kbd>C</kbd></button></li>
             </ul>
         </section>
         <section class="tool-group">
             <h2>Yerleştir</h2>
             <ul>
-                <li><button id="Node-tool" type="button"><span class="button_top">Nokta ekle</span></button></li>
-                <li><button id="Object-tool" type="button"><span class="button_top">Obje ekle</span></button></li>
+                <li><button class="tool-btn" data-tool="hotspot" type="button" title="Haritaya tıklayarak panorama noktası ekle (N)">
+                        <span class="tool-ico ico-hotspot" aria-hidden="true"></span>Panorama noktası<kbd>N</kbd></button></li>
+                <li><button class="tool-btn" data-tool="object" type="button" title="Haritaya tıklayarak 3D obje ekle (O)">
+                        <span class="tool-ico ico-object" aria-hidden="true"></span>3D obje<kbd>O</kbd></button></li>
             </ul>
         </section>
         <section class="tool-group">
-            <h2>Görünüm</h2>
-            <ul>
-                <li><button id="Switch-panorama-tool" type="button"><span class="button_top">Panoramayı
-                            aç</span></button></li>
-            </ul>
+            <h2>Düzen</h2>
+            <div class="row-btns">
+                <button id="btn-undo" class="btn btn-ghost" type="button" title="Geri al (Ctrl+Z)" disabled>↶ Geri</button>
+                <button id="btn-redo" class="btn btn-ghost" type="button" title="Yinele (Ctrl+Y)" disabled>↷ İleri</button>
+            </div>
+        </section>
+        <section class="tool-group help">
+            <h2>Kısayollar</h2>
+            <dl>
+                <dt>Shift + tık</dt><dd>Çoklu seçim</dd>
+                <dt>Boş alanda sürükle</dt><dd>Kutu ile seç</dd>
+                <dt>Delete</dt><dd>Seçileni sil</dd>
+                <dt>Ctrl + D</dt><dd>Çoğalt</dd>
+                <dt>Çift tık (nokta)</dt><dd>Panoramayı aç</dd>
+                <dt>Esc</dt><dd>İptal / seçimi bırak</dd>
+            </dl>
         </section>
     </aside>
 
-    <div class='main-container'>
-        <div id="konva-container"></div>
-        <div id="container"></div>
-    </div>
+    <main class="main-container">
+        <div class="workspace">
+            <div id="konva-container" aria-label="Kat planı"></div>
+            <div id="pano-container"></div>
+            <button id="pano-exit" class="pano-exit builder-only" type="button">← Haritaya dön</button>
+            <div id="empty-hint" class="empty-hint builder-only" hidden>
+                <strong>Boş bir tur</strong>
+                <span>Soldan <b>Dikdörtgen</b> ile odaları çizin, ardından <b>Panorama noktası</b> ekleyip her noktaya bir 360° fotoğraf seçin.</span>
+            </div>
+        </div>
+    </main>
 
-    <!-- Sağ özellik panelleri (JS visibility ile açıp kapatır) -->
-    <aside id="side-bar2" class="builder-only">
-        <h2>Nokta özellikleri</h2>
-        <div id="properties">
-            <li><button id="Change-color-tool" type="button"><span class="button_top">Rengi değiştir</span></button>
-            </li>
-            <li><button id="Set-panorama-tool" type="button"><span class="button_top">Panorama seç</span></button></li>
-            <li><button id="Remove-object-tool" class="remove-item" type="button"><span
-                        class="button_top">Sil</span></button></li>
-        </div>
-    </aside>
-    <aside id="object-side-bar" class="builder-only">
-        <h2>Obje özellikleri</h2>
-        <div id="properties">
-            <li><button id="Change-color-tool" type="button"><span class="button_top">Rengi değiştir</span></button>
-            </li>
-            <li><button id="Set-object-tool" type="button"><span class="button_top">3D model seç</span></button></li>
-            <li><button id="Set-info-tool" type="button"><span class="button_top">Bilgi düzenle</span></button></li>
-            <li><button id="Remove-object-tool" class="remove-item" type="button"><span
-                        class="button_top">Sil</span></button></li>
-        </div>
-        <div class="model-controls">
-            <h3>3D model ayarı</h3>
+    <div id="tool-hint" class="tool-hint" hidden></div>
+
+    <!-- Sağ özellik paneli -->
+    <aside id="inspector" class="builder-only" hidden aria-label="Özellikler">
+        <!-- Oda -->
+        <section data-panel="room">
+            <h2>Oda</h2>
+            <label class="field-row">Renk <input id="room-color" type="color" value="#cbd5e1"></label>
+            <button id="room-lock" class="btn btn-block" type="button">Kilitle</button>
+            <p class="hint">Kilitli odalar taşınamaz ve boyutlandırılamaz.</p>
+        </section>
+
+        <!-- Panorama noktası -->
+        <section data-panel="hotspot">
+            <h2>Panorama noktası</h2>
+            <label class="field-label" for="hotspot-label">Ad</label>
+            <input id="hotspot-label" class="text-input" type="text" maxlength="60" placeholder="Örn. Giriş">
+
+            <span class="field-label">Panorama</span>
+            <button id="hotspot-pano-pick" class="pano-pick" type="button">
+                <img id="hotspot-pano-thumb" alt="" hidden>
+                <span id="hotspot-pano-name">Panorama seç…</span>
+            </button>
+
             <div class="slider-row">
-                <label for="model-scale">Boyut <output id="model-scale-val">1.00×</output></label>
-                <input id="model-scale" type="range" min="0.1" max="5" step="0.05" value="1">
+                <label for="hotspot-range">Görüş menzili <output id="hotspot-range-val">200 px</output></label>
+                <input id="hotspot-range" type="range" min="40" max="800" step="10" value="200">
             </div>
-            <div class="slider-row">
-                <label for="model-rot-y">Yatay dönüş <output id="model-rot-y-val">0°</output></label>
-                <input id="model-rot-y" type="range" min="-180" max="180" step="1" value="0">
+            <label class="check-row"><input id="hotspot-start" type="checkbox"> Turun başlangıç noktası</label>
+            <button id="hotspot-open" class="btn btn-primary btn-block" type="button">Panoramayı aç</button>
+            <p class="hint">Menzil içindeki diğer noktalar panoramada geçiş oku, objeler 3D model olarak görünür.</p>
+        </section>
+
+        <!-- 3D obje -->
+        <section data-panel="object">
+            <h2>3D obje</h2>
+            <p id="object-title" class="object-title">İsimsiz obje</p>
+            <button id="object-info-edit" class="btn btn-block" type="button">Bilgiyi düzenle</button>
+            <span class="field-label">Model</span>
+            <button id="object-model-pick" class="pano-pick" type="button">
+                <span class="model-ico" aria-hidden="true"></span>
+                <span id="object-model-name">Varsayılan kutu</span>
+            </button>
+            <div class="model-controls">
+                <div class="slider-row">
+                    <label for="model-scale">Boyut <output id="model-scale-val">1.00×</output></label>
+                    <input id="model-scale" type="range" min="0.05" max="5" step="0.05" value="1">
+                </div>
+                <div class="slider-row">
+                    <label for="model-rot-y">Yatay dönüş <output id="model-rot-y-val">0°</output></label>
+                    <input id="model-rot-y" type="range" min="-180" max="180" step="1" value="0">
+                </div>
+                <div class="slider-row">
+                    <label for="model-rot-x">Eğim <output id="model-rot-x-val">0°</output></label>
+                    <input id="model-rot-x" type="range" min="-180" max="180" step="1" value="0">
+                </div>
+                <div class="slider-row">
+                    <label for="model-rot-z">Yan yatma <output id="model-rot-z-val">0°</output></label>
+                    <input id="model-rot-z" type="range" min="-180" max="180" step="1" value="0">
+                </div>
+                <div class="slider-row">
+                    <label for="model-pitch">Dikey konum <output id="model-pitch-val">0°</output></label>
+                    <input id="model-pitch" type="range" min="-30" max="25" step="1" value="0">
+                </div>
+                <button id="model-reset" class="btn btn-block" type="button">Ayarları sıfırla</button>
             </div>
-            <div class="slider-row">
-                <label for="model-rot-x">Eğim <output id="model-rot-x-val">0°</output></label>
-                <input id="model-rot-x" type="range" min="-180" max="180" step="1" value="0">
-            </div>
-            <div class="slider-row">
-                <label for="model-rot-z">Yan yatma <output id="model-rot-z-val">0°</output></label>
-                <input id="model-rot-z" type="range" min="-180" max="180" step="1" value="0">
-            </div>
-            <button id="model-reset" type="button"><span class="button_top">Sıfırla</span></button>
-            <p class="model-hint">Önizleme için, bu objenin görüş alanındaki bir noktanın panoramasını açın.</p>
+            <p class="hint">Canlı önizleme için bu objeyi menzilinde gören bir noktanın panoramasını açın.</p>
+        </section>
+
+        <!-- Çoklu seçim -->
+        <section data-panel="multi">
+            <h2 id="multi-title">Çoklu seçim</h2>
+            <button id="room-merge" class="btn btn-block" type="button">Odaları birleştir</button>
+            <p class="hint">Seçili odaları tek bir şekilde birleştirir.</p>
+        </section>
+
+        <div class="inspector-footer">
+            <button id="sel-duplicate" class="btn" type="button" title="Çoğalt (Ctrl+D)">Çoğalt</button>
+            <button id="sel-delete" class="btn btn-danger" type="button" title="Sil (Delete)">Sil</button>
         </div>
     </aside>
 
     <!-- Modallar -->
-    <div id="tours-modal" class="modal-overlay">
-        <div class="modal-content">
+    <div id="tours-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="tours-modal-title">
+        <div class="modal-content modal-wide">
             <div class="modal-header">
-                <h2>Kayıtlı turlarım</h2>
-                <span id="close-tours-modal" class="close-btn">&times;</span>
+                <h2 id="tours-modal-title">Turlarım</h2>
+                <button class="close-btn" data-close type="button" aria-label="Kapat">&times;</button>
             </div>
-            <div id="tours-list-container"></div>
+            <div id="tours-grid" class="card-grid"></div>
         </div>
     </div>
 
-    <div id="tour-preview-modal" class="modal-overlay">
-        <div class="modal-content preview-modal-content">
+    <div id="asset-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="asset-modal-title">
+        <div class="modal-content modal-wide">
             <div class="modal-header">
-                <h2 id="preview-tour-name">Tur önizleme</h2>
-                <span id="close-preview-modal" class="close-btn">&times;</span>
-            </div>
-            <div class="preview-body">
-                <div class="preview-image-wrapper">
-                    <img id="preview-tour-image" src="" alt="Tur önizlemesi" />
-                </div>
-                <p id="preview-tour-date" class="preview-date"></p>
-            </div>
-            <div class="preview-actions">
-                <button id="preview-btn-load" class="btn-load-tour" type="button">Yükle</button>
-                <button id="preview-btn-delete" class="btn-delete-tour" type="button">Sil</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="asset-library-modal" class="modal-overlay">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="asset-library-title">Kütüphane</h2>
-                <span id="close-asset-library-modal" class="close-btn">&times;</span>
+                <h2 id="asset-modal-title">Kütüphane</h2>
+                <button class="close-btn" data-close type="button" aria-label="Kapat">&times;</button>
             </div>
             <div class="asset-upload-row">
-                <label for="asset-file-input" class="btn-upload-asset">Dosya yükle</label>
-                <input type="file" id="asset-file-input" style="display:none;" />
+                <label class="btn btn-primary" for="asset-file-input">Dosya yükle</label>
+                <input type="file" id="asset-file-input" hidden>
+                <span id="asset-upload-hint" class="hint"></span>
+                <progress id="asset-upload-progress" max="100" value="0" hidden></progress>
             </div>
-            <div id="asset-library-grid"></div>
+            <div id="asset-grid" class="card-grid asset-grid"></div>
         </div>
     </div>
 
-    <div id="object-info-modal" class="modal-overlay builder-only">
+    <div id="object-info-modal" class="modal-overlay builder-only" role="dialog" aria-modal="true" aria-labelledby="object-info-title">
         <div class="modal-content editor-modal-content">
             <div class="modal-header">
-                <h2>Obje bilgisi</h2>
-                <span id="close-object-info-modal" class="close-btn">&times;</span>
+                <h2 id="object-info-title">Obje bilgisi</h2>
+                <button class="close-btn" data-close type="button" aria-label="Kapat">&times;</button>
             </div>
             <label class="field-label" for="object-name-input">İsim</label>
-            <input id="object-name-input" type="text" maxlength="80" placeholder="Örn. Ahşap koltuk">
-            <label class="field-label">Açıklama</label>
+            <input id="object-name-input" class="text-input" type="text" maxlength="80" placeholder="Örn. Ahşap koltuk">
+            <span class="field-label">Açıklama</span>
             <div id="object-desc-editor"></div>
-            <div class="preview-actions">
-                <button id="object-info-cancel" class="btn-delete-tour" type="button">Vazgeç</button>
-                <button id="object-info-save" class="btn-load-tour" type="button">Kaydet</button>
+            <div class="modal-actions">
+                <button class="btn" data-close type="button">Vazgeç</button>
+                <button id="object-info-save" class="btn btn-primary" type="button">Kaydet</button>
             </div>
         </div>
     </div>
 
-    <!-- Obje bilgi paneli (viewer'da da görünür) -->
-    <div id="object-info-panel" class="info-panel">
+    <!-- Obje bilgi paneli (önizleme / paylaşım) -->
+    <div id="object-info-panel" class="info-panel" aria-live="polite">
         <div class="info-panel-header">
-            <h3 class="info-title">Obje başlığı</h3>
-            <button id="close-info-panel" class="info-close-btn" type="button">&times;</button>
+            <h3 class="info-title"></h3>
+            <button id="close-info-panel" class="info-close-btn" type="button" aria-label="Kapat">&times;</button>
         </div>
         <div class="info-panel-body">
-            <img src="assets/panorama/placeholder.jpg" alt="Obje görseli" class="info-image">
-            <div class="info-description">
-                Bu obje hakkında detaylı bilgi alanı. ...
-            </div>
-            <div class="info-details">
-                <div class="info-row"><span class="info-label">Kategori</span><span class="info-value">Dekorasyon</span>
-                </div>
-                <div class="info-row"><span class="info-label">Materyal</span><span class="info-value">Ahşap /
-                        Metal</span></div>
-                <div class="info-row"><span class="info-label">Durum</span><span
-                        class="info-value info-ok">Mevcut</span></div>
-            </div>
+            <div class="info-description"></div>
         </div>
     </div>
+
+    <div id="toasts" class="toasts" aria-live="polite"></div>
 
     <script type="module" src="js/main.js"></script>
 </body>

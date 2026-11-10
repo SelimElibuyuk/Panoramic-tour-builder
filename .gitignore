@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+panoromic_visit_builder/backend/data/
